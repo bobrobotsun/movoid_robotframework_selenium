@@ -7,15 +7,12 @@
 # Description   : 
 """
 
-import math
 import os
 import pathlib
 import re
 import time
-from typing import List, Union
+from typing import List
 
-import cv2
-from movoid_function import reset_function_default_value
 from movoid_robotframework import robot_log_keyword, do_until_check, do_when_error
 from movoid_robotframework.error import RfError
 from selenium.webdriver import Keys
@@ -123,7 +120,7 @@ class SeleniumAction(BasicCommon):
 
     @robot_log_keyword
     def selenium_input_delete_all_and_input(self, input_locator, input_text):
-        input_element = self.analyse_element(input_locator)
+        input_element = self.selenium_analyse_element(input_locator)
         self.print(f'try to input ({str(input_text)}) by ({input_text})')
         input_text = str(input_text)
         self.print(f'find element:{input_element.get_attribute("outerHTML")},')
@@ -135,7 +132,7 @@ class SeleniumAction(BasicCommon):
             input_element.send_keys(i)
             time.sleep(0.01)
         self.print(f'input {input_text} success')
-        self.wait_until_find_element_attribute(input_locator, input_text, 'value')
+        self.selenium_wait_until_find_element_attribute(input_locator, input_text, 'value')
 
     @robot_log_keyword
     def selenium_check_contain_element(self, check_locator, check_exist=True):
@@ -197,11 +194,11 @@ class SeleniumAction(BasicCommon):
     @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
     @do_until_check(always_true, selenium_find_element_with_attribute)
-    def wait_until_find_element_attribute(self):
+    def selenium_wait_until_find_element_attribute(self):
         pass
 
     @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init, timeout=24, do_interval=6)
-    def click_until_attribute_change(self):
+    @do_until_check(selenium_click_element_with_offset, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
+    def selenium_click_until_attribute_change(self):
         pass
