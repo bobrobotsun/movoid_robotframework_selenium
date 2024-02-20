@@ -13,6 +13,7 @@ import re
 import time
 from typing import List
 
+from movoid_function import reset_function_default_value
 from movoid_robotframework import robot_log_keyword, do_until_check, do_when_error
 from movoid_robotframework.error import RfError
 from selenium.webdriver import Keys
@@ -26,12 +27,15 @@ class SeleniumAction(BasicCommon):
         super().__init__()
         self._check_element_attribute_change_value = None
 
-    @robot_log_keyword
     def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
         return self.selenium_take_screenshot(image_name=screenshot_name)
 
+    def selenium_click_element(self, click_locator, operate='click'):
+        self.selenium_click_element_with_offset(click_locator, 0, 0, operate)
+        return True
+
     @robot_log_keyword
-    def selenium_click_element_with_offset(self, click_locator, x, y, operate='click'):
+    def selenium_click_element_with_offset(self, click_locator, x=0, y=0, operate='click'):
         tar_element = self.selenium_analyse_element(click_locator)
         self.action_chains.move_to_element_with_offset(tar_element, x, y)
         if operate == 'click':
@@ -39,16 +43,17 @@ class SeleniumAction(BasicCommon):
         elif operate in ('double_click', 'doubleclick'):
             self.action_chains.double_click()
         self.action_chains.perform()
+        return True
 
     @robot_log_keyword
-    def selenium_check_element_attribute(self, check_locator, check_attribute='innerText', check_value='', check_regex=True, check_check_bool=True):
+    def selenium_check_element_attribute(self, check_locator, check_attribute='innerText', check_value='', regex=True, check_bool=True):
         """
         检查所有元素中，是否存在一个属性满足要求的元素
         :param check_locator: 元素定位
         :param check_attribute: 属性名
         :param check_value: 属性值
-        :param check_regex: 是否做正则匹配
-        :param check_check_bool: 要求满足条件还是不满足条件的
+        :param regex: 是否做正则匹配
+        :param check_bool: 要求满足条件还是不满足条件的
         :return: 判定结果
         """
         tar_elements = self.selenium_find_elements_by_locator(check_locator)
@@ -56,18 +61,18 @@ class SeleniumAction(BasicCommon):
         for i_element, one_element in enumerate(tar_elements):
             tar_value = one_element.get_attribute(check_attribute)
             self.print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
-            if check_regex:
+            if regex:
                 check_result = bool(re.search(check_value, tar_value))
                 self.print(f'{check_result}: <{check_value}> in <{tar_value}>')
             else:
                 check_result = check_value == tar_value
                 self.print(f'{check_result}: <{check_value}> == <{tar_value}>')
-            tar_exist = tar_exist or check_result == check_check_bool
+            tar_exist = tar_exist or check_result == check_bool
         self.print(f'check result is:{tar_exist}')
         return tar_exist
 
     @robot_log_keyword
-    def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', find_regex=True, find_check_bool=True) -> List[WebElement]:
+    def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', regex=True, check_bool=True) -> List[WebElement]:
         tar_elements = self.selenium_analyse_elements(find_locator)
         find_elements = []
         if find_attribute is None:
@@ -78,22 +83,22 @@ class SeleniumAction(BasicCommon):
             for i_element, one_element in enumerate(tar_elements):
                 tar_value = one_element.get_attribute(find_attribute)
                 self.print(f'{find_attribute} of <{find_locator}>({i_element}) is:{tar_value}')
-                if find_regex:
+                if regex:
                     check_result = bool(re.search(find_value, tar_value))
                     self.print(f'{check_result}: <{find_value}> in <{tar_value}>')
                 else:
                     check_result = find_value == tar_value
                     self.print(f'{check_result}: <{find_value}> == <{tar_value}>')
-                if check_result == find_check_bool:
+                if check_result == check_bool:
                     find_elements.append(one_element)
-            self.print(f'find {len(find_elements)} elements <{find_locator}> <{find_attribute}> is <{find_value}>(regex={find_regex},check={find_check_bool})')
+            self.print(f'find {len(find_elements)} elements <{find_locator}> <{find_attribute}> is <{find_value}>(regex={regex},check={check_bool})')
         return find_elements
 
     @robot_log_keyword
-    def selenium_find_element_with_attribute(self, find_locator, find_value='', find_attribute='innerText', find_regex=True, find_check_bool=True):
-        find_elements = self.selenium_find_elements_with_attribute(find_locator, find_value=find_value, find_attribute=find_attribute, find_regex=find_regex, find_check_bool=find_check_bool)
+    def selenium_find_element_with_attribute(self, find_locator, find_value='', find_attribute='innerText', regex=True, check_bool=True):
+        find_elements = self.selenium_find_elements_with_attribute(find_locator, find_value=find_value, find_attribute=find_attribute, regex=regex, check_bool=check_bool)
         if len(find_elements) == 0:
-            raise RfError(f'fail to find <{find_locator}> with <{find_attribute}> is <{find_value}>(re={find_regex},bool={find_check_bool})')
+            raise RfError(f'fail to find <{find_locator}> with <{find_attribute}> is <{find_value}>(re={regex},bool={check_bool})')
         return find_elements[0]
 
     @robot_log_keyword
@@ -169,7 +174,7 @@ class SeleniumAction(BasicCommon):
 
     @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
-    @do_until_check(selenium_click_element_with_offset, always_true)
+    @do_until_check(always_true, selenium_click_element_with_offset)
     def selenium_click_until_available(self):
         pass
 
@@ -177,6 +182,10 @@ class SeleniumAction(BasicCommon):
     @do_when_error(selenium_take_full_screenshot)
     @do_until_check(selenium_click_element_with_offset, selenium_check_contain_element)
     def selenium_click_until_find_element(self):
+        pass
+
+    @reset_function_default_value(selenium_click_until_find_element)
+    def selenium_click_until_not_find_element(self, check_exist=False):
         pass
 
     @robot_log_keyword

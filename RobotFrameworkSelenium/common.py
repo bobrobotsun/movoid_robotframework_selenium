@@ -14,10 +14,10 @@ import cv2
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
 from Selenium2Library import Selenium2Library
+from movoid_robotframework import RobotBasic, robot_log_keyword
 from movoid_robotframework.error import RfError
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
-from movoid_robotframework import RobotBasic, robot_log_keyword
 
 
 class BasicCommon(RobotBasic):
@@ -117,10 +117,6 @@ class BasicCommon(RobotBasic):
             self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
             self.print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
         return tar_name, tar_path
-
-    @robot_log_keyword
-    def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
-        return self.selenium_take_screenshot(image_name=screenshot_name)
 
     @robot_log_keyword
     def selenium_analyse_image(self, image):

@@ -7,3 +7,7 @@
 # Description   : 
 """
 from .main import RobotSeleniumBasic
+
+
+class RobotFrameworkSelenium(RobotSeleniumBasic):
+    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
