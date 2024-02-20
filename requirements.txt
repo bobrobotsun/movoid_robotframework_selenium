@@ -1,0 +1,8 @@
+twine
+build
+selenium
+robotframework
+robotframework_selenium2library
+movoid_function
+movoid_robotframework
+opencv-python
