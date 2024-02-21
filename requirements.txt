@@ -1,6 +1,6 @@
 twine
 build
-selenium
+selenium==4.6.0
 robotframework
 robotframework_selenium2library
 movoid_function

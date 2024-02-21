@@ -14,8 +14,7 @@ import time
 from typing import List
 
 from movoid_function import reset_function_default_value
-from movoid_robotframework import robot_log_keyword, do_until_check, do_when_error
-from movoid_robotframework.error import RfError
+from RobotFrameworkBasic import robot_log_keyword, do_until_check, do_when_error, RfError
 from selenium.webdriver import Keys
 from selenium.webdriver.remote.webelement import WebElement
 

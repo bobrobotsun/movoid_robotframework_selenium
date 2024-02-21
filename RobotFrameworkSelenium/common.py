@@ -14,8 +14,7 @@ import cv2
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
 from Selenium2Library import Selenium2Library
-from movoid_robotframework import RobotBasic, robot_log_keyword
-from movoid_robotframework.error import RfError
+from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 
