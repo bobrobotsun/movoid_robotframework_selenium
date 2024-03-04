@@ -136,7 +136,7 @@ class SeleniumAction(BasicCommon):
             input_element.send_keys(i)
             time.sleep(0.01)
         self.print(f'input {input_text} success')
-        self.selenium_wait_until_find_element_attribute(input_locator, input_text, 'value')
+        self.selenium_wait_until_find_element_attribute(input_locator, input_text, 'value', regex=False)
 
     @robot_log_keyword
     def selenium_check_contain_element(self, check_locator, check_exist=True):
