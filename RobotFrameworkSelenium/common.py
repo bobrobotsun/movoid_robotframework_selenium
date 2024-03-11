@@ -13,8 +13,8 @@ from typing import List, Tuple, Union
 import cv2
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
-from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
 from Selenium2Library import Selenium2Library
+from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -129,7 +129,7 @@ class BasicCommon(RobotBasic):
     @robot_log_keyword
     def selenium_analyse_element(self, locator: Union[WebElement, str]) -> WebElement:
         if isinstance(locator, str):
-            return self.selenium_lib.wait_until_page_contains_element(locator, timeout=3)
+            return self.selenium_find_element_by_locator(locator)
         elif isinstance(locator, list):
             return locator[0]
         else:

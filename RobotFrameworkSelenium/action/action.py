@@ -124,7 +124,7 @@ class SeleniumAction(BasicCommon):
 
     @robot_log_keyword
     def selenium_input_delete_all_and_input(self, input_locator, input_text):
-        input_element = self.selenium_analyse_element(input_locator)
+        input_element = self.selenium_lib.wait_until_page_contains_element(input_locator)
         self.print(f'try to input ({str(input_text)}) by ({input_text})')
         input_text = str(input_text)
         self.print(f'find element:{input_element.get_attribute("outerHTML")},')
