@@ -40,13 +40,27 @@ class BasicCommon(RobotBasic):
         self.screenshot_root = self.selenium_lib.screenshot_root_directory
 
     @robot_log_keyword
+    def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
+        if locator.startswith('/'):
+            return 'xpath', locator
+        elif '=' in locator:
+            by, path = locator.split('=', 1)
+            by = by.lower().replace('_', ' ').strip(' ')
+            if by in ["id", "xpath", "link text", "partial link text", "name", "tag name", "class name", "css selector"]:
+                return by, path
+            else:
+                return "css selector", locator
+        else:
+            return "css selector", locator
+
+    @robot_log_keyword
     def selenium_find_elements_by_locator(self, locator) -> List[WebElement]:
-        by, path = locator.split('=', 1)
+        by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_elements(by, path)
 
     @robot_log_keyword
     def selenium_find_element_by_locator(self, locator) -> WebElement:
-        by, path = locator.split('=', 1)
+        by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_element(by, path)
 
     @robot_log_keyword
