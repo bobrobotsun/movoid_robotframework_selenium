@@ -23,7 +23,7 @@ class BasicCommon(RobotBasic):
     def __init__(self):
         super().__init__()
         self.built: robot.libraries.BuiltIn.BuiltIn = getattr(self, 'built', None)
-        self.selenium_lib: Selenium2Library = getattr(self, 'built', None)
+        self.selenium_lib: Selenium2Library = getattr(self, 'selenium_lib', None)
         self.driver: selenium.webdriver.chrome.webdriver.WebDriver = getattr(self, 'driver', None)
         self.action_chains: ActionChains = getattr(self, 'action_chains', None)
         self.screenshot_root: str = getattr(self, 'screenshot_root', None)

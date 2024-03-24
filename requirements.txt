@@ -5,4 +5,5 @@ robotframework
 robotframework_selenium2library
 movoid_function
 movoid_robotframework
+movoid_package
 opencv-python

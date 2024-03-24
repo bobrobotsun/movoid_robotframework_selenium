@@ -11,20 +11,22 @@ import os
 import pathlib
 import re
 import time
-from typing import List
+from typing import List, Union
 
 from movoid_function import reset_function_default_value
 from RobotFrameworkBasic import robot_log_keyword, do_until_check, do_when_error, RfError
 from selenium.webdriver import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
-from ..common import BasicCommon
+from movoid_package import importing
+
+BasicCommon = importing('..common', 'BasicCommon')
 
 
 class SeleniumAction(BasicCommon):
     def __init__(self):
         super().__init__()
-        self._check_element_attribute_change_value = None
+        self._check_element_attribute_change_value: Union[str, None] = None
 
     def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
         return self.selenium_take_screenshot(image_name=screenshot_name)
