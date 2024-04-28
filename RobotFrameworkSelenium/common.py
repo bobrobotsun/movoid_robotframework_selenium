@@ -6,11 +6,13 @@
 # Time          : 2024/2/16 18:47
 # Description   : 
 """
+import base64
 import math
 import os
 from typing import List, Tuple, Union
 
 import cv2
+import numpy as np
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
 from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
@@ -37,7 +39,8 @@ class BasicCommon(RobotBasic):
         self.selenium_lib = self.built.get_library_instance('Selenium2Library')
         self.driver = self.selenium_lib.driver
         self.action_chains = ActionChains(self.driver)
-        self.screenshot_root = self.selenium_lib.screenshot_root_directory
+        self.screenshot_root = '.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory
+        self.print(self.screenshot_root)
 
     @robot_log_keyword
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
@@ -87,9 +90,7 @@ class BasicCommon(RobotBasic):
 
     @robot_log_keyword
     def selenium_get_full_screenshot_path(self, screenshot_name):
-        suite = self.get_robot_variable('SUITE NAME').replace(' ', '_')
-        case_ori = self.get_robot_variable('TEST NAME')
-        folder_name = suite if case_ori is None else f"{suite}-{case_ori.replace(' ', '_')}"
+        folder_name = self.get_suite_case_str().replace(' ', '_')
         full_folder_path = os.path.join(self.screenshot_root, folder_name)
         if not os.path.exists(full_folder_path):
             os.mkdir(full_folder_path)
@@ -132,9 +133,28 @@ class BasicCommon(RobotBasic):
         return tar_name, tar_path
 
     @robot_log_keyword
-    def selenium_log_screenshot(self):
-        img = self.driver.get_screenshot_as_base64()
+    def selenium_log_screenshot(self, screenshot_locator=None):
+        if screenshot_locator is None:
+            img = self.driver.get_screenshot_as_base64()
+        else:
+            img_data = self.driver.get_screenshot_as_png()
+            img_array = np.fromstring(img_data, np.uint8)
+            full_image = cv2.imdecode(img_array, cv2.COLOR_RGB2BGR)
+            tar_element = self.selenium_analyse_element(screenshot_locator)
+            element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
+            self.print("element_position:", element_position)
+            cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
+            cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
+            self.print("cut image shape:", cut_image.shape)
+            image = cv2.imencode('.png', cut_image)[1]
+            img = str(base64.b64encode(image))[2:-1]
         self.print(f'<img src="data:image/png;base64,{img}">', html=True)
+
+    @robot_log_keyword
+    def selenium_log_screenshot_path(self, screenshot_name):
+        full_path = self.selenium_get_full_screenshot_path(screenshot_name)
+        self.print(full_path)
+        self.log_show_image(full_path)
 
     @robot_log_keyword
     def selenium_analyse_image(self, image):
