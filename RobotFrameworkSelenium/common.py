@@ -13,8 +13,8 @@ from typing import List, Tuple, Union
 import cv2
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
-from Selenium2Library import Selenium2Library
 from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
+from Selenium2Library import Selenium2Library
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -130,6 +130,11 @@ class BasicCommon(RobotBasic):
             self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
             self.print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
         return tar_name, tar_path
+
+    @robot_log_keyword
+    def selenium_log_screenshot(self):
+        img = self.driver.get_screenshot_as_base64()
+        self.print(f'<img src="data:image/png;base64,{img}">', html=True)
 
     @robot_log_keyword
     def selenium_analyse_image(self, image):
