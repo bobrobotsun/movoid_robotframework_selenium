@@ -35,12 +35,12 @@ class BasicCommon(RobotBasic):
         self.window_y: float = getattr(self, 'window_y', None)
 
     @robot_log_keyword
-    def selenium_init(self):
+    def selenium_init(self, screenshot_log: bool = False):
+        screenshot_log = self.robot_check_param(screenshot_log, bool, False)
         self.selenium_lib = self.built.get_library_instance('Selenium2Library')
         self.driver = self.selenium_lib.driver
         self.action_chains = ActionChains(self.driver)
-        self.screenshot_root = '.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory
-        self.print(self.screenshot_root)
+        self.screenshot_root = None if screenshot_log else ('.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory)
 
     @robot_log_keyword
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
@@ -51,6 +51,14 @@ class BasicCommon(RobotBasic):
             by = by.lower().replace('_', ' ').strip(' ')
             if by in ["id", "xpath", "link text", "partial link text", "name", "tag name", "class name", "css selector"]:
                 return by, path
+            elif by in ('css',):
+                return "css selector", locator
+            elif by in ('link',):
+                return "partial link text", locator
+            elif by in ('tag',):
+                return "tag name", locator
+            elif by in ('class',):
+                return "class name", locator
             else:
                 return "css selector", locator
         else:
@@ -99,43 +107,51 @@ class BasicCommon(RobotBasic):
 
     @robot_log_keyword
     def selenium_cut_screenshot(self, screenshot_locator, image_name='element-cut-image.png'):
-        tar_name, tar_path = self.selenium_take_screenshot(None, image_name)
-        full_image = self.selenium_analyse_image(tar_name)
-        if screenshot_locator is None:
-            return full_image
+        if self.screenshot_root is None:
+            self.selenium_log_screenshot(screenshot_locator)
         else:
-            tar_element = self.selenium_analyse_element(screenshot_locator)
-            element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
-            self.print(element_position)
-            cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
-            cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
-            self.print(cut_image.shape)
-            tar_path_split = os.path.splitext(tar_path)
-            cv2.imwrite(tar_path_split[0] + '(cut)' + tar_path_split[1], cut_image)
-            return cut_image
+            tar_name, tar_path = self.selenium_take_screenshot(None, image_name)
+            full_image = self.selenium_analyse_image(tar_name)
+            if screenshot_locator is None:
+                return full_image
+            else:
+                tar_element = self.selenium_analyse_element(screenshot_locator)
+                element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
+                self.print(element_position)
+                cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
+                cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
+                self.print(cut_image.shape)
+                tar_path_split = os.path.splitext(tar_path)
+                cv2.imwrite(tar_path_split[0] + '(cut)' + tar_path_split[1], cut_image)
+                return cut_image
 
     @robot_log_keyword
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
-        tar_name = image_name
-        ind = 1
-        tar_path = self.selenium_get_full_screenshot_path(tar_name)
-        while rename and os.path.isfile(tar_path):
-            ind += 1
-            name, post = os.path.splitext(image_name)
-            tar_name = f'{name}-{ind}{post}'
-            tar_path = self.selenium_get_full_screenshot_path(tar_name)
-        if screenshot_locator is None:
-            self.selenium_lib.capture_page_screenshot(tar_path)
-            self.print(f'take a full window screenshot:{tar_name}')
+        if self.screenshot_root is None:
+            self.selenium_log_screenshot(screenshot_locator)
+            return None, None
         else:
-            self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
-            self.print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
-        return tar_name, tar_path
+            tar_name = image_name
+            ind = 1
+            tar_path = self.selenium_get_full_screenshot_path(tar_name)
+            while rename and os.path.isfile(tar_path):
+                ind += 1
+                name, post = os.path.splitext(image_name)
+                tar_name = f'{name}-{ind}{post}'
+                tar_path = self.selenium_get_full_screenshot_path(tar_name)
+            if screenshot_locator is None:
+                self.selenium_lib.capture_page_screenshot(tar_path)
+                self.print(f'take a full window screenshot:{tar_name}')
+            else:
+                self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
+                self.print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
+            return tar_name, tar_path
 
     @robot_log_keyword
     def selenium_log_screenshot(self, screenshot_locator=None):
         if screenshot_locator is None:
             img = self.driver.get_screenshot_as_base64()
+            cv_value = np.frombuffer(base64.b64decode(img), np.uint8)
         else:
             img_data = self.driver.get_screenshot_as_png()
             img_array = np.fromstring(img_data, np.uint8)
@@ -145,10 +161,12 @@ class BasicCommon(RobotBasic):
             self.print("element_position:", element_position)
             cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
             cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
+            cv_value = cut_image
             self.print("cut image shape:", cut_image.shape)
             image = cv2.imencode('.png', cut_image)[1]
             img = str(base64.b64encode(image))[2:-1]
         self.print(f'<img src="data:image/png;base64,{img}">', html=True)
+        return cv_value
 
     @robot_log_keyword
     def selenium_log_screenshot_path(self, screenshot_name):
