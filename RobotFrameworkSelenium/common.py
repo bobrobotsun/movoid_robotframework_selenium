@@ -108,12 +108,12 @@ class BasicCommon(RobotBasic):
     @robot_log_keyword
     def selenium_cut_screenshot(self, screenshot_locator, image_name='element-cut-image.png'):
         if self.screenshot_root is None:
-            self.selenium_log_screenshot(screenshot_locator)
+            cut_image = self.selenium_log_screenshot(screenshot_locator)
         else:
             tar_name, tar_path = self.selenium_take_screenshot(None, image_name)
             full_image = self.selenium_analyse_image(tar_name)
             if screenshot_locator is None:
-                return full_image
+                cut_image = full_image
             else:
                 tar_element = self.selenium_analyse_element(screenshot_locator)
                 element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
@@ -123,7 +123,8 @@ class BasicCommon(RobotBasic):
                 self.print(cut_image.shape)
                 tar_path_split = os.path.splitext(tar_path)
                 cv2.imwrite(tar_path_split[0] + '(cut)' + tar_path_split[1], cut_image)
-                return cut_image
+        self.print(f'the shape of cut screenshot is {cut_image.shape}')
+        return cut_image
 
     @robot_log_keyword
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
