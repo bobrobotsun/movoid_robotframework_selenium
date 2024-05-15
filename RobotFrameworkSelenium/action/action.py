@@ -89,7 +89,11 @@ class SeleniumAction(BasicCommon):
         else:
             self.print(f'find {len(tar_elements)} elements <{find_locator}> first')
             for i_element, one_element in enumerate(tar_elements):
-                tar_value = one_element.get_attribute(find_attribute)
+                try:
+                    tar_value = one_element.get_attribute(find_attribute)
+                except:
+                    self.print(f'{find_attribute} of <{find_locator}>({i_element}) can not be read, pass it')
+                    continue
                 self.print(f'{find_attribute} of <{find_locator}>({i_element}) is:{tar_value}')
                 if regex:
                     check_result = bool(re.search(find_value, tar_value))

@@ -9,7 +9,7 @@
 import base64
 import math
 import os
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Any
 
 import cv2
 import numpy as np
@@ -129,8 +129,7 @@ class BasicCommon(RobotBasic):
     @robot_log_keyword
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
         if self.screenshot_root is None:
-            self.selenium_log_screenshot(screenshot_locator)
-            return None, None
+            return self.selenium_log_screenshot(screenshot_locator), None
         else:
             tar_name = image_name
             ind = 1
