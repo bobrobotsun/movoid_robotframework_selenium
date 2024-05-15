@@ -14,7 +14,7 @@ import time
 from typing import List, Union
 
 import cv2
-from RobotFrameworkBasic import robot_log_keyword, do_until_check, do_when_error, RfError
+from RobotFrameworkBasic import robot_log_keyword, do_until_check, do_when_error, RfError, wait_until_stable
 from movoid_function import reset_function_default_value
 from movoid_package import importing
 from selenium.webdriver import Keys
@@ -191,6 +191,22 @@ class SeleniumAction(BasicCommon):
         self.print(f'we find {check_locator} count of {now_count} {"!=" if re_bool else "=="}{self._check_element_count_value}')
         return re_bool
 
+    @robot_log_keyword
+    def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute='innerText'):
+        tar_element = self.selenium_find_element_by_locator(check_locator)
+        self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
+        return False
+
+    @robot_log_keyword
+    def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute='innerText'):
+        tar_element = self.selenium_find_element_by_locator(check_locator)
+        temp_value = tar_element.get_attribute(check_attribute)
+        re_bool = self._check_element_attribute_change_value == temp_value
+        if re_bool is False:
+            self._check_element_attribute_change_value = temp_value
+        self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
+        return re_bool
+
     def always_true(self):
         return True
 
@@ -266,4 +282,32 @@ class SeleniumAction(BasicCommon):
     @do_when_error(selenium_take_full_screenshot)
     @do_until_check(selenium_click_element_with_offset, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
     def selenium_click_until_element_count_change(self):
+        pass
+
+    @robot_log_keyword
+    @do_when_error(selenium_take_full_screenshot)
+    @wait_until_stable(selenium_check_contain_element)
+    def selenium_wait_until_stable_find_element(self):
+        pass
+
+    @robot_log_keyword
+    @do_when_error(selenium_take_full_screenshot)
+    @wait_until_stable(selenium_check_contain_elements)
+    def selenium_wait_until_stable_find_elements(self):
+        pass
+
+    @reset_function_default_value(selenium_click_until_find_element)
+    def selenium_wait_until_stable_not_find_element(self, check_exist=False):
+        pass
+
+    @robot_log_keyword
+    @do_when_error(selenium_take_full_screenshot)
+    @wait_until_stable(selenium_find_element_with_attribute)
+    def selenium_wait_until_stable_find_element_attribute(self):
+        pass
+
+    @robot_log_keyword
+    @do_when_error(selenium_take_full_screenshot)
+    @wait_until_stable(selenium_check_stable_element_attribute_unchanged_loop, init_check_function=selenium_check_stable_element_attribute_unchanged_init)
+    def selenium_wait_until_stable_attribute_unchanged(self):
         pass
