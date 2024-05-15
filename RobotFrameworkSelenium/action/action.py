@@ -296,7 +296,7 @@ class SeleniumAction(BasicCommon):
     def selenium_wait_until_stable_find_elements(self):
         pass
 
-    @reset_function_default_value(selenium_click_until_find_element)
+    @reset_function_default_value(selenium_wait_until_stable_find_element)
     def selenium_wait_until_stable_not_find_element(self, check_exist=False):
         pass
 
