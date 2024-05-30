@@ -41,6 +41,8 @@ class BasicCommon(RobotBasic):
         self.driver = self.selenium_lib.driver
         self.action_chains = ActionChains(self.driver)
         self.screenshot_root = None if screenshot_log else ('.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory)
+        if screenshot_log is True:
+            self.selenium_lib.set_screenshot_directory("EMBED")
 
     @robot_log_keyword
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
