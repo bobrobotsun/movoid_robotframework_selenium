@@ -214,14 +214,14 @@ class SeleniumAction(BasicCommon):
     def always_true(self):
         return True
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_click_element_with_offset)
     def selenium_click_until_available(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_check_contain_element)
     def selenium_wait_until_find_element(self):
         pass
@@ -230,14 +230,14 @@ class SeleniumAction(BasicCommon):
     def selenium_wait_until_not_find_element(self, check_exist=False):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(selenium_click_element_with_offset, selenium_check_contain_element)
     def selenium_click_until_find_element(self):
         pass
@@ -246,56 +246,56 @@ class SeleniumAction(BasicCommon):
     def selenium_click_until_not_find_element(self, check_exist=False):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_find_element_with_attribute)
     def selenium_wait_until_find_element_attribute(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(selenium_click_element_with_offset, selenium_find_element_with_attribute)
     def selenium_click_until_find_element_attribute(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
     def selenium_wait_until_attribute_change(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(selenium_click_element_with_offset, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
     def selenium_click_until_attribute_change(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(always_true, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
     def selenium_wait_until_element_count_change(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @do_until_check(selenium_click_element_with_offset, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
     def selenium_click_until_element_count_change(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @wait_until_stable(selenium_check_contain_element)
     def selenium_wait_until_stable_find_element(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @wait_until_stable(selenium_check_contain_elements)
     def selenium_wait_until_stable_find_elements(self):
         pass
@@ -304,14 +304,14 @@ class SeleniumAction(BasicCommon):
     def selenium_wait_until_stable_not_find_element(self, check_exist=False):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @wait_until_stable(selenium_find_element_with_attribute)
     def selenium_wait_until_stable_find_element_attribute(self):
         pass
 
-    @robot_log_keyword
     @do_when_error(selenium_take_full_screenshot)
+    @robot_log_keyword
     @wait_until_stable(selenium_check_stable_element_attribute_unchanged_loop, init_check_function=selenium_check_stable_element_attribute_unchanged_init)
     def selenium_wait_until_stable_attribute_unchanged(self):
         pass
