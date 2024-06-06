@@ -136,7 +136,7 @@ class SeleniumAction(BasicCommon):
         self.print(f'delete all {len(elements)} elements:{delete_locator}')
 
     @robot_log_keyword
-    def selenium_input_delete_all_and_input(self, input_locator, input_text):
+    def selenium_input_delete_all_and_input(self, input_locator, input_text, stable_time=1.0):
         self.selenium_lib.wait_until_page_contains_element(input_locator)
         input_element = self.selenium_analyse_element(input_locator)
         self.print(f'try to input ({str(input_text)}) by ({input_text})')
@@ -146,11 +146,13 @@ class SeleniumAction(BasicCommon):
         self.print(f'element has text({len(now_str)}):{now_str}')
         for _ in now_str:
             input_element.send_keys(Keys.BACK_SPACE)
+            input_element.send_keys(Keys.BACK_SPACE)
         for i in input_text:
             input_element.send_keys(i)
             time.sleep(0.01)
+        input_element.send_keys(Keys.TAB)
         self.print(f'input {input_text} success')
-        self.selenium_wait_until_find_element_attribute(input_locator, input_text, 'value', regex=False)
+        self.selenium_wait_until_stable_find_element_attribute(input_locator, input_text, 'value', regex=False, stable_time=stable_time)
 
     @robot_log_keyword
     def selenium_check_contain_element(self, check_locator, check_exist=True):
