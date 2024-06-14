@@ -53,7 +53,7 @@ class SeleniumAction(BasicCommon):
         self.action_chains.perform()
         return True
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_element_attribute(self, check_locator, check_attribute='innerText', check_value='', regex=True, check_bool=True):
         """
         检查所有元素中，是否存在一个属性满足要求的元素
@@ -154,14 +154,14 @@ class SeleniumAction(BasicCommon):
         self.print(f'input {input_text} success')
         time.sleep(sleep_time)
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_contain_element(self, check_locator, check_exist=True):
         find_elements = self.selenium_find_elements_by_locator(check_locator)
         find_elements_bool = len(find_elements) > 0
         self.print(f'we find {find_elements_bool}→{check_exist} {check_locator}')
         return find_elements_bool == check_exist
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_contain_elements(self, check_locator, check_count=1):
         check_count = int(check_count)
         find_elements = self.selenium_find_elements_by_locator(check_locator)
@@ -169,14 +169,14 @@ class SeleniumAction(BasicCommon):
         self.print(f'we find {find_elements_num}→{check_count} {check_locator}')
         return find_elements_num == check_count
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText'):
         tar_element = self.selenium_find_element_by_locator(check_locator)
         self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
         self.print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
         return False
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute='innerText'):
         tar_element = self.selenium_find_element_by_locator(check_locator)
         temp_value = tar_element.get_attribute(check_attribute)
@@ -184,26 +184,26 @@ class SeleniumAction(BasicCommon):
         self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"!=" if re_bool else "=="}{self._check_element_attribute_change_value}')
         return re_bool
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_element_count_change_init(self, check_locator):
         self._check_element_count_value = len(self.selenium_find_elements_by_locator(check_locator))
         self.print(f'we find {check_locator} count of {self._check_element_count_value}')
         return False
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_element_count_change_loop(self, check_locator):
         now_count = len(self.selenium_find_elements_by_locator(check_locator))
         re_bool = now_count != self._check_element_count_value
         self.print(f'we find {check_locator} count of {now_count} {"!=" if re_bool else "=="}{self._check_element_count_value}')
         return re_bool
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute='innerText'):
         tar_element = self.selenium_find_element_by_locator(check_locator)
         self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
         return False
 
-    @robot_log_keyword
+    @robot_log_keyword(False)
     def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute='innerText'):
         tar_element = self.selenium_find_element_by_locator(check_locator)
         temp_value = tar_element.get_attribute(check_attribute)
