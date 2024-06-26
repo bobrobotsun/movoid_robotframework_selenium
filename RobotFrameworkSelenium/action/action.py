@@ -136,7 +136,7 @@ class SeleniumAction(BasicCommon):
         self.print(f'delete all {len(elements)} elements:{delete_locator}')
 
     @robot_log_keyword
-    def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0):
+    def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
         self.selenium_lib.wait_until_page_contains_element(input_locator)
         input_element = self.selenium_analyse_element(input_locator)
         self.print(f'try to input ({str(input_text)}) by ({input_text})')
@@ -144,15 +144,19 @@ class SeleniumAction(BasicCommon):
         self.print(f'find element:{input_element.get_attribute("outerHTML")},')
         now_str = input_element.get_attribute('value')
         self.print(f'element has text({len(now_str)}):{now_str}')
-        for _ in now_str:
-            input_element.send_keys(Keys.BACK_SPACE)
-            input_element.send_keys(Keys.BACK_SPACE)
-        for i in input_text:
-            input_element.send_keys(i)
-            time.sleep(0.01)
-        input_element.send_keys(Keys.TAB)
-        self.print(f'input {input_text} success')
-        time.sleep(sleep_time)
+        if now_str == str(input_text) and pass_when_same_input:
+            self.print(f'it has already been {now_str}, pass input')
+            input_element.send_keys(Keys.TAB)
+        else:
+            for _ in now_str:
+                input_element.send_keys(Keys.BACK_SPACE)
+                input_element.send_keys(Keys.BACK_SPACE)
+            for i in input_text:
+                input_element.send_keys(i)
+                time.sleep(0.01)
+            input_element.send_keys(Keys.TAB)
+            self.print(f'input {input_text} success')
+            time.sleep(sleep_time)
 
     @robot_log_keyword(False)
     def selenium_check_contain_element(self, check_locator, check_exist=True):
