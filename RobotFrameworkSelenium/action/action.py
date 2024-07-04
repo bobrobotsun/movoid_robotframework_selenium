@@ -54,12 +54,13 @@ class SeleniumAction(BasicCommon):
         return True
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute(self, check_locator, check_attribute='innerText', check_value='', regex=True, check_bool=True):
+    def selenium_check_element_attribute(self, check_locator, check_value, check_attribute='innerText', attribute_type='', regex=True, check_bool=True):
         """
         检查所有元素中，是否存在一个属性满足要求的元素
         :param check_locator: 元素定位
-        :param check_attribute: 属性名
         :param check_value: 属性值
+        :param check_attribute: 属性名
+        :param attribute_type: 属性类型：attribute、dom、property
         :param regex: 是否做正则匹配
         :param check_bool: 要求满足条件还是不满足条件的
         :return: 判定结果
@@ -67,7 +68,7 @@ class SeleniumAction(BasicCommon):
         tar_elements = self.selenium_find_elements_by_locator(check_locator)
         tar_exist = False
         for i_element, one_element in enumerate(tar_elements):
-            tar_value = one_element.get_attribute(check_attribute)
+            tar_value = self.selenium_get_locator_attribute(one_element, check_attribute, attribute_type)
             self.print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
             if regex:
                 check_result = bool(re.search(check_value, tar_value))
@@ -80,7 +81,7 @@ class SeleniumAction(BasicCommon):
         return tar_exist
 
     @robot_log_keyword
-    def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', regex=True, check_bool=True) -> List[WebElement]:
+    def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', attribute_type='', regex=True, check_bool=True) -> List[WebElement]:
         tar_elements = self.selenium_analyse_elements(find_locator)
         find_elements = []
         if find_attribute is None:
@@ -90,7 +91,7 @@ class SeleniumAction(BasicCommon):
             self.print(f'find {len(tar_elements)} elements <{find_locator}> first')
             for i_element, one_element in enumerate(tar_elements):
                 try:
-                    tar_value = one_element.get_attribute(find_attribute)
+                    tar_value = self.selenium_get_locator_attribute(one_element, find_attribute, attribute_type)
                 except:
                     self.print(f'{find_attribute} of <{find_locator}>({i_element}) can not be read, pass it')
                     continue
@@ -114,9 +115,19 @@ class SeleniumAction(BasicCommon):
         return find_elements[0]
 
     @robot_log_keyword
-    def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText'):
+    def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText', attribute_type=''):
         tar_element = self.selenium_find_element_by_locator(target_locator)
-        return tar_element.get_attribute(target_attribute)
+        if attribute_type == 'attribute':
+            re_value = tar_element.get_attribute(target_attribute)
+        elif attribute_type == 'property':
+            re_value = tar_element.get_property(target_attribute)
+        elif attribute_type == 'dom':
+            re_value = tar_element.get_dom_attribute(target_attribute)
+        else:
+            re_value = tar_element.get_attribute(target_attribute)
+            re_value = tar_element.get_dom_attribute(target_attribute) if re_value is None else re_value
+            re_value = tar_element.get_property(target_attribute) if re_value is None else re_value
+        return re_value
 
     @robot_log_keyword
     def selenium_new_screenshot_folder(self):
@@ -174,16 +185,16 @@ class SeleniumAction(BasicCommon):
         return find_elements_num == check_count
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText'):
+    def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type=''):
         tar_element = self.selenium_find_element_by_locator(check_locator)
-        self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
+        self._check_element_attribute_change_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
         self.print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
         return False
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute='innerText'):
+    def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute='innerText', attribute_type=''):
         tar_element = self.selenium_find_element_by_locator(check_locator)
-        temp_value = tar_element.get_attribute(check_attribute)
+        temp_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
         re_bool = self._check_element_attribute_change_value != temp_value
         self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"!=" if re_bool else "=="}{self._check_element_attribute_change_value}')
         return re_bool
@@ -217,6 +228,7 @@ class SeleniumAction(BasicCommon):
         self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
         return re_bool
 
+    @robot_log_keyword
     def always_true(self):
         return True
 

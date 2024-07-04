@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name='movoid_robotframework_selenium',
-    version='1.2.10.001',
+    version='1.2.10.002',
     packages=find_packages(),
     url='',
     license='',
