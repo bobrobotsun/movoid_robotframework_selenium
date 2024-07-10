@@ -65,7 +65,7 @@ class SeleniumAction(BasicCommon):
         :param check_bool: 要求满足条件还是不满足条件的
         :return: 判定结果
         """
-        tar_elements = self.selenium_analyse_element(check_locator)
+        tar_elements = self.selenium_analyse_elements(check_locator)
         tar_exist = False
         for i_element, one_element in enumerate(tar_elements):
             tar_value = self.selenium_get_locator_attribute(one_element, check_attribute, attribute_type)
@@ -77,6 +77,7 @@ class SeleniumAction(BasicCommon):
                 check_result = check_value == tar_value
                 self.print(f'{check_result}: <{check_value}> == <{tar_value}>')
             tar_exist = tar_exist or check_result == check_bool
+            self.print(f'{i_element}/{len(tar_elements)} is {check_result} -> {check_result == check_bool}')
         self.print(f'check result is:{tar_exist}')
         return tar_exist
 
