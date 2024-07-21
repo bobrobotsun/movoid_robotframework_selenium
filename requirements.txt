@@ -1,5 +1,7 @@
 twine
 build
+pytest
+pytest-html
 selenium==4.6.0
 numpy
 robotframework
