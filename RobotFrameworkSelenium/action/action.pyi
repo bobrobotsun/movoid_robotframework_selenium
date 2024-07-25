@@ -17,9 +17,9 @@ class SeleniumAction(BasicCommon):
 		self._check_element_attribute_change_value: typing.Union[str, None] =  None
 		self._check_element_count_value: typing.Union[int, None] =  None
 	def selenium_take_full_screenshot(self, screenshot_name = 'python-screenshot.png'):	...
-	def selenium_click_element(self, click_locator, operate = 'click', timeout=3):	...
+	def selenium_click_element(self, click_locator, operate = 'click', wait_timeout=0.5):	...
 	def selenium_get_element_color_list(self, screenshot_locator = None, image_name = 'catch-image-color.png', rename = True):	...
-	def selenium_click_element_with_offset(self, click_locator, x = 0, y = 0, operate = 'click'):	...
+	def selenium_click_element_with_offset(self, click_locator, x = 0, y = 0, operate = 'click', wait_timeout=0.5):	...
 	def selenium_check_element_attribute(self, check_locator, check_value, check_attribute = 'innerText', attribute_type='', regex = True, check_bool = True):
 		"""
 		检查所有元素中，是否存在一个属性满足要求的元素
@@ -47,7 +47,7 @@ class SeleniumAction(BasicCommon):
 	def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute = 'innerText'):	...
 	def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute = 'innerText'):	...
 	def always_true(self):	...
-	def selenium_click_until_available(self, click_locator, x = 0, y = 0, operate = 'click', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_available(self, click_locator, x = 0, y = 0, operate = 'click', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
@@ -59,15 +59,15 @@ class SeleniumAction(BasicCommon):
 		"""
 		"""
 		...
-	def selenium_click_until_find_elements(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_count = 1, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_find_elements(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_count = 1, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
-	def selenium_click_until_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist = True, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist = True, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
-	def selenium_click_until_not_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist = False, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_not_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist = False, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
@@ -75,7 +75,7 @@ class SeleniumAction(BasicCommon):
 		"""
 		"""
 		...
-	def selenium_click_until_find_element_attribute(self, click_locator, find_locator, x = 0, y = 0, operate = 'click', find_value = '', find_attribute = 'innerText', attribute_type='', regex = True, check_bool = True, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_find_element_attribute(self, click_locator, find_locator, x = 0, y = 0, operate = 'click', find_value = '', find_attribute = 'innerText', attribute_type='', regex = True, check_bool = True, screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
@@ -83,7 +83,7 @@ class SeleniumAction(BasicCommon):
 		"""
 		"""
 		...
-	def selenium_click_until_attribute_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_attribute = 'innerText', attribute_type='', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_attribute_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_attribute = 'innerText', attribute_type='', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...
@@ -91,7 +91,7 @@ class SeleniumAction(BasicCommon):
 		"""
 		"""
 		...
-	def selenium_click_until_element_count_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True):
+	def selenium_click_until_element_count_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', screenshot_name = 'python-screenshot.png', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, wait_timeout=0.5, check_interval = 0.2, error = True):
 		"""
 		"""
 		...

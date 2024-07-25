@@ -4,7 +4,7 @@ Library            Selenium2Library
 
 *** Keywords ***
 suite-setup
-    Create Webdriver
+    Create Webdriver    Chrome
     Config Init
     Selenium Init
 
