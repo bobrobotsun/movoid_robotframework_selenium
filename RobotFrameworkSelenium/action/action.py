@@ -32,8 +32,7 @@ class SeleniumAction(BasicCommon):
     def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
         return self.selenium_take_screenshot(image_name=screenshot_name)
 
-    def selenium_click_element(self, click_locator, operate='click', wait_timeout=0.5):
-        self.selenium_wait_until_find_element(click_locator, timeout=wait_timeout)
+    def selenium_click_element(self, click_locator, operate='click'):
         self.selenium_click_element_with_offset(click_locator, 0, 0, operate)
         return True
 
@@ -44,8 +43,7 @@ class SeleniumAction(BasicCommon):
         return cv2.imread(tar_path)
 
     @robot_log_keyword
-    def selenium_click_element_with_offset(self, click_locator, x=0, y=0, operate='click', wait_timeout=0.5):
-        self.selenium_wait_until_find_element(click_locator, timeout=wait_timeout)
+    def selenium_click_element_with_offset(self, click_locator, x=0, y=0, operate='click'):
         tar_element = self.selenium_analyse_element(click_locator)
         self.action_chains.move_to_element_with_offset(tar_element, x, y)
         if operate == 'click':
