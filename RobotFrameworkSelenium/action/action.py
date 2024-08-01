@@ -98,7 +98,7 @@ class SeleniumAction(BasicCommon):
                     continue
                 self.print(f'{find_attribute} of <{find_locator}>({i_element}) is:{tar_value}')
                 if regex:
-                    check_result = bool(re.search(find_value, tar_value))
+                    check_result = bool(re.search(str(find_value), tar_value))
                     self.print(f'{check_result}: <{find_value}> in <{tar_value}>')
                 else:
                     check_result = find_value == tar_value
