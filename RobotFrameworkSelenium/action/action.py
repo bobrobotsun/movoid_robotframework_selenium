@@ -151,23 +151,30 @@ class SeleniumAction(BasicCommon):
     def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
         self.selenium_lib.wait_until_page_contains_element(input_locator)
         input_element = self.selenium_analyse_element(input_locator)
-        self.print(f'try to input ({str(input_text)}) by ({input_text})')
+        print(f'try to input ({str(input_text)}) by ({input_text})')
         input_text = str(input_text)
-        self.print(f'find element:{input_element.get_attribute("outerHTML")},')
+        print(f'find element:{input_element.get_attribute("outerHTML")},')
         now_str = input_element.get_attribute('value')
-        self.print(f'element has text({len(now_str)}):{now_str}')
+        print(f'element has text({len(now_str)}):{now_str}')
         if now_str == str(input_text) and pass_when_same_input:
-            self.print(f'it has already been {now_str}, pass input')
+            print(f'it has already been {now_str}, pass input')
             input_element.send_keys(Keys.TAB)
         else:
-            for _ in now_str:
-                input_element.send_keys(Keys.BACK_SPACE)
-                input_element.send_keys(Keys.BACK_SPACE)
+            temp_value = now_str
+            for i in range(len(now_str) * 5):
+                temp_value = self.selenium_get_locator_attribute(input_locator, 'value')
+                if temp_value:
+                    input_element.send_keys(Keys.BACK_SPACE)
+                else:
+                    break
+            print(f'we try to delete all input text, and now it is {temp_value}')
             for i in input_text:
                 input_element.send_keys(i)
                 time.sleep(0.01)
+            now_value = self.selenium_get_locator_attribute(input_locator, 'value')
+            print(f'we want {input_text} and got {now_value}')
             input_element.send_keys(Keys.TAB)
-            self.print(f'input {input_text} success')
+            print(f'tab and leave input')
             time.sleep(sleep_time)
 
     @robot_log_keyword(False)
