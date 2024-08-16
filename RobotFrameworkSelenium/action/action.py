@@ -258,7 +258,7 @@ class SeleniumAction(BasicCommon):
 
     @do_when_error(selenium_take_full_screenshot)
     @robot_log_keyword
-    @do_until_check(always_true, selenium_check_contain_elements)
+    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
