@@ -39,7 +39,7 @@ class SeleniumAction(BasicCommon):
     @robot_log_keyword
     def selenium_get_element_color_list(self, screenshot_locator=None, image_name='catch-image-color.png', rename=True):
         tar_name, tar_path = self.selenium_take_screenshot(screenshot_locator, image_name, rename)
-        self.print(f'try to read image:{tar_path}')
+        print(f'try to read image:{tar_path}')
         return cv2.imread(tar_path)
 
     @robot_log_keyword
@@ -69,16 +69,16 @@ class SeleniumAction(BasicCommon):
         tar_exist = False
         for i_element, one_element in enumerate(tar_elements):
             tar_value = self.selenium_get_locator_attribute(one_element, check_attribute, attribute_type)
-            self.print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
+            print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
             if regex:
                 check_result = bool(re.search(check_value, tar_value))
-                self.print(f'{check_result}: <{check_value}> in <{tar_value}>')
+                print(f'{check_result}: <{check_value}> in <{tar_value}>')
             else:
                 check_result = check_value == tar_value
-                self.print(f'{check_result}: <{check_value}> == <{tar_value}>')
+                print(f'{check_result}: <{check_value}> == <{tar_value}>')
             tar_exist = tar_exist or check_result == check_bool
-            self.print(f'{i_element}/{len(tar_elements)} is {check_result} -> {check_result == check_bool}')
-        self.print(f'check result is:{tar_exist}')
+            print(f'{i_element}/{len(tar_elements)} is {check_result} -> {check_result == check_bool}')
+        print(f'check result is:{tar_exist}')
         return tar_exist
 
     @robot_log_keyword
@@ -87,25 +87,25 @@ class SeleniumAction(BasicCommon):
         find_elements = []
         if find_attribute is None:
             find_elements = tar_elements
-            self.print(f'find {len(find_elements)} elements only locator <{find_locator}>')
+            print(f'find {len(find_elements)} elements only locator <{find_locator}>')
         else:
-            self.print(f'find {len(tar_elements)} elements <{find_locator}> first')
+            print(f'find {len(tar_elements)} elements <{find_locator}> first')
             for i_element, one_element in enumerate(tar_elements):
                 try:
                     tar_value = self.selenium_get_locator_attribute(one_element, find_attribute, attribute_type)
                 except:
-                    self.print(f'{find_attribute} of <{find_locator}>({i_element}) can not be read, pass it')
+                    print(f'{find_attribute} of <{find_locator}>({i_element}) can not be read, pass it')
                     continue
-                self.print(f'{find_attribute} of <{find_locator}>({i_element}) is:{tar_value}')
+                print(f'{find_attribute} of <{find_locator}>({i_element}) is:{tar_value}')
                 if regex:
                     check_result = bool(re.search(str(find_value), tar_value))
-                    self.print(f'{check_result}: <{find_value}> in <{tar_value}>')
+                    print(f'{check_result}: <{find_value}> in <{tar_value}>')
                 else:
                     check_result = find_value == tar_value
-                    self.print(f'{check_result}: <{find_value}> == <{tar_value}>')
+                    print(f'{check_result}: <{find_value}> == <{tar_value}>')
                 if check_result == check_bool:
                     find_elements.append(one_element)
-            self.print(f'find {len(find_elements)} elements <{find_locator}> <{find_attribute}> is <{find_value}>(regex={regex},check={check_bool})')
+            print(f'find {len(find_elements)} elements <{find_locator}> <{find_attribute}> is <{find_value}>(regex={regex},check={check_bool})')
         return find_elements
 
     @robot_log_keyword
@@ -137,15 +137,15 @@ class SeleniumAction(BasicCommon):
             screen_pathlib = pathlib.Path(screen_path)
             if not screen_pathlib.exists():
                 os.mkdir(screen_path)
-                self.print('create dir : {}'.format(screen_path))
+                print('create dir : {}'.format(screen_path))
 
     @robot_log_keyword
     def selenium_delete_elements(self, delete_locator):
         elements = self.selenium_analyse_elements(delete_locator)
-        self.print(f'find {len(elements)} elements:{delete_locator}')
+        print(f'find {len(elements)} elements:{delete_locator}')
         for one_element in elements:
             self.selenium_execute_js_script('arguments[0].remove();', one_element)
-        self.print(f'delete all {len(elements)} elements:{delete_locator}')
+        print(f'delete all {len(elements)} elements:{delete_locator}')
 
     @robot_log_keyword
     def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
@@ -181,7 +181,7 @@ class SeleniumAction(BasicCommon):
     def selenium_check_contain_element(self, check_locator, check_exist=True):
         find_elements = self.selenium_analyse_elements(check_locator)
         find_elements_bool = len(find_elements) > 0
-        self.print(f'we find {find_elements_bool}→{check_exist} {check_locator}')
+        print(f'we find {find_elements_bool}→{check_exist} {check_locator}')
         return find_elements_bool == check_exist
 
     @robot_log_keyword(False)
@@ -189,14 +189,14 @@ class SeleniumAction(BasicCommon):
         check_count = int(check_count)
         find_elements = self.selenium_analyse_elements(check_locator)
         find_elements_num = len(find_elements)
-        self.print(f'we find {find_elements_num}→{check_count} {check_locator}')
+        print(f'we find {find_elements_num}→{check_count} {check_locator}')
         return find_elements_num == check_count
 
     @robot_log_keyword(False)
     def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type=''):
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
-        self.print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
+        print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
         return False
 
     @robot_log_keyword(False)
@@ -204,20 +204,20 @@ class SeleniumAction(BasicCommon):
         tar_element = self.selenium_analyse_element(check_locator)
         temp_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
         re_bool = self._check_element_attribute_change_value != temp_value
-        self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"!=" if re_bool else "=="}{self._check_element_attribute_change_value}')
+        print(f'we find {check_attribute} of {check_locator} is {temp_value}{"!=" if re_bool else "=="}{self._check_element_attribute_change_value}')
         return re_bool
 
     @robot_log_keyword(False)
     def selenium_check_element_count_change_init(self, check_locator):
         self._check_element_count_value = len(self.selenium_analyse_elements(check_locator))
-        self.print(f'we find {check_locator} count of {self._check_element_count_value}')
+        print(f'we find {check_locator} count of {self._check_element_count_value}')
         return False
 
     @robot_log_keyword(False)
     def selenium_check_element_count_change_loop(self, check_locator):
         now_count = len(self.selenium_analyse_elements(check_locator))
         re_bool = now_count != self._check_element_count_value
-        self.print(f'we find {check_locator} count of {now_count} {"!=" if re_bool else "=="}{self._check_element_count_value}')
+        print(f'we find {check_locator} count of {now_count} {"!=" if re_bool else "=="}{self._check_element_count_value}')
         return re_bool
 
     @robot_log_keyword(False)
@@ -233,7 +233,7 @@ class SeleniumAction(BasicCommon):
         re_bool = self._check_element_attribute_change_value == temp_value
         if re_bool is False:
             self._check_element_attribute_change_value = temp_value
-        self.print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
+        print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
         return re_bool
 
     @robot_log_keyword

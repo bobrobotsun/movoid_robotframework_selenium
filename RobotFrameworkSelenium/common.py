@@ -104,7 +104,7 @@ class BasicCommon(RobotBasic):
         full_folder_path = os.path.join(self.screenshot_root, folder_name)
         if not os.path.exists(full_folder_path):
             os.mkdir(full_folder_path)
-            self.print(f'create image folder:{folder_name}')
+            print(f'create image folder:{folder_name}')
         return os.path.join(full_folder_path, screenshot_name)
 
     @robot_log_keyword
@@ -119,13 +119,13 @@ class BasicCommon(RobotBasic):
             else:
                 tar_element = self.selenium_analyse_element(screenshot_locator)
                 element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
-                self.print(element_position)
+                print(element_position)
                 cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
                 cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
-                self.print(cut_image.shape)
+                print(cut_image.shape)
                 tar_path_split = os.path.splitext(tar_path)
                 cv2.imwrite(tar_path_split[0] + '(cut)' + tar_path_split[1], cut_image)
-        self.print(f'the shape of cut screenshot is {cut_image.shape}')
+        print(f'the shape of cut screenshot is {cut_image.shape}')
         return cut_image
 
     @robot_log_keyword
@@ -143,10 +143,10 @@ class BasicCommon(RobotBasic):
                 tar_path = self.selenium_get_full_screenshot_path(tar_name)
             if screenshot_locator is None:
                 self.selenium_lib.capture_page_screenshot(tar_path)
-                self.print(f'take a full window screenshot:{tar_name}')
+                print(f'take a full window screenshot:{tar_name}')
             else:
                 self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
-                self.print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
+                print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
             return tar_name, tar_path
 
     @robot_log_keyword
@@ -160,11 +160,11 @@ class BasicCommon(RobotBasic):
             full_image = cv2.imdecode(img_array, cv2.COLOR_RGB2BGR)
             tar_element = self.selenium_analyse_element(screenshot_locator)
             element_position = self.selenium_execute_js_script('return arguments[0].getBoundingClientRect();', tar_element)
-            self.print("element_position:", element_position)
+            print("element_position:", element_position)
             cut_rect = [math.floor(element_position['left']), math.floor(element_position['top']), math.floor(element_position['right']), math.floor(element_position['bottom'])]
             cut_image = full_image[cut_rect[1]:cut_rect[3], cut_rect[0]:cut_rect[2]]
             cv_value = cut_image
-            self.print("cut image shape:", cut_image.shape)
+            print("cut image shape:", cut_image.shape)
             image = cv2.imencode('.png', cut_image)[1]
             img = str(base64.b64encode(image))[2:-1]
         self.print(f'<img src="data:image/png;base64,{img}">', html=True)
@@ -173,14 +173,13 @@ class BasicCommon(RobotBasic):
     @robot_log_keyword
     def selenium_log_screenshot_path(self, screenshot_name):
         full_path = self.selenium_get_full_screenshot_path(screenshot_name)
-        self.print(full_path)
         self.log_show_image(full_path)
 
     @robot_log_keyword
     def selenium_analyse_image(self, image):
         if isinstance(image, str):
             image_full_path = image if os.path.isfile(image) else self.selenium_get_full_screenshot_path(image)
-            self.print(f'try to read image:{image_full_path}')
+            print(f'try to read image:{image_full_path}')
             return cv2.imread(image_full_path)
         else:
             return image
