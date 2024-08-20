@@ -149,7 +149,7 @@ class SeleniumAction(BasicCommon):
 
     @robot_log_keyword
     def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
-        self.selenium_lib.wait_until_page_contains_element(input_locator)
+        self.selenium_wait_until_find_element(input_locator)
         input_element = self.selenium_analyse_element(input_locator)
         print(f'try to input ({str(input_text)}) by ({input_text})')
         input_text = str(input_text)
@@ -161,13 +161,14 @@ class SeleniumAction(BasicCommon):
             input_element.send_keys(Keys.TAB)
         else:
             temp_value = now_str
-            for i in range(len(now_str) * 5):
+            input_element.clear()
+            for i in range(len(now_str) * 3):
                 temp_value = self.selenium_get_locator_attribute(input_locator, 'value')
                 if temp_value:
                     input_element.send_keys(Keys.BACK_SPACE)
                 else:
                     break
-            print(f'we try to delete all input text, and now it is {temp_value}')
+            print(f'we try to delete all input text, and now it is >{temp_value}<')
             for i in input_text:
                 input_element.send_keys(i)
                 time.sleep(0.01)
