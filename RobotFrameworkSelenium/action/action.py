@@ -160,20 +160,21 @@ class SeleniumAction(BasicCommon):
             print(f'it has already been {now_str}, pass input')
             input_element.send_keys(Keys.TAB)
         else:
-            temp_value = now_str
-            input_element.clear()
-            for i in range(len(now_str) * 3):
-                temp_value = self.selenium_get_locator_attribute(input_locator, 'value')
-                if temp_value:
-                    input_element.send_keys(Keys.BACK_SPACE)
-                else:
+            for input_retry in range(5):
+                for backspace_count in range(len(now_str) + 2):
+                    input_element.send_keys(Keys.BACKSPACE)
+                now_str = self.selenium_get_locator_attribute(input_locator, "value")
+                print(f'we try to delete all input text, and now it is >{now_str}<')
+                for i in input_text:
+                    input_element.send_keys(i)
+                    time.sleep(0.01)
+                now_str = self.selenium_get_locator_attribute(input_locator, 'value')
+                print(f'we want >{input_text}< and got >{now_str}<')
+                if str(now_str) == str(input_text):
                     break
-            print(f'we try to delete all input text, and now it is >{temp_value}<')
-            for i in input_text:
-                input_element.send_keys(i)
-                time.sleep(0.01)
-            now_value = self.selenium_get_locator_attribute(input_locator, 'value')
-            print(f'we want {input_text} and got {now_value}')
+                else:
+                    print(f'input failed {input_retry} time, we try to input again')
+                    time.sleep(0.1)
             input_element.send_keys(Keys.TAB)
             print(f'tab and leave input')
             time.sleep(sleep_time)
