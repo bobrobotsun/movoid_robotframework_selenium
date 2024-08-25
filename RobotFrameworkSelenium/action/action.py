@@ -14,16 +14,18 @@ import time
 from typing import List, Union
 
 import cv2
-from RobotFrameworkBasic import robot_log_keyword, do_until_check, do_when_error, RfError, wait_until_stable
-from movoid_function import reset_function_default_value
+from RobotFrameworkBasic import robot_log_keyword, robot_no_log_keyword, do_until_check, do_when_error, RfError, wait_until_stable
+from movoid_debug import debug
+from movoid_function import reset_function_default_value, decorate_class_function_exclude
 from movoid_package import importing
 from selenium.webdriver import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
-BasicCommon = importing('..common', 'BasicCommon')
+Basic = importing('..common', 'BasicCommon')
 
 
-class SeleniumAction(BasicCommon):
+@decorate_class_function_exclude(robot_log_keyword)
+class SeleniumAction(Basic):
     def __init__(self):
         super().__init__()
         self._check_element_attribute_change_value: Union[str, None] = None
@@ -36,13 +38,11 @@ class SeleniumAction(BasicCommon):
         self.selenium_click_element_with_offset(click_locator, 0, 0, operate)
         return True
 
-    @robot_log_keyword
     def selenium_get_element_color_list(self, screenshot_locator=None, image_name='catch-image-color.png', rename=True):
         tar_name, tar_path = self.selenium_take_screenshot(screenshot_locator, image_name, rename)
         print(f'try to read image:{tar_path}')
         return cv2.imread(tar_path)
 
-    @robot_log_keyword
     def selenium_click_element_with_offset(self, click_locator, x=0, y=0, operate='click'):
         tar_element = self.selenium_analyse_element(click_locator)
         self.action_chains.move_to_element_with_offset(tar_element, x, y)
@@ -81,7 +81,6 @@ class SeleniumAction(BasicCommon):
         print(f'check result is:{tar_exist}')
         return tar_exist
 
-    @robot_log_keyword
     def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', attribute_type='', regex=True, check_bool=True) -> List[WebElement]:
         tar_elements = self.selenium_analyse_elements(find_locator)
         find_elements = []
@@ -108,14 +107,12 @@ class SeleniumAction(BasicCommon):
             print(f'find {len(find_elements)} elements <{find_locator}> <{find_attribute}> is <{find_value}>(regex={regex},check={check_bool})')
         return find_elements
 
-    @robot_log_keyword
     def selenium_find_element_with_attribute(self, find_locator, find_value='', find_attribute='innerText', regex=True, check_bool=True):
         find_elements = self.selenium_find_elements_with_attribute(find_locator, find_value=find_value, find_attribute=find_attribute, regex=regex, check_bool=check_bool)
         if len(find_elements) == 0:
             raise RfError(f'fail to find <{find_locator}> with <{find_attribute}> is <{find_value}>(re={regex},bool={check_bool})')
         return find_elements[0]
 
-    @robot_log_keyword
     def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText', attribute_type=''):
         tar_element = self.selenium_analyse_element(target_locator)
         if attribute_type == 'attribute':
@@ -130,7 +127,6 @@ class SeleniumAction(BasicCommon):
             re_value = tar_element.get_property(target_attribute) if re_value is None else re_value
         return re_value
 
-    @robot_log_keyword
     def selenium_new_screenshot_folder(self):
         screen_path = self.get_robot_variable("Screenshot_path")
         if screen_path:
@@ -139,7 +135,6 @@ class SeleniumAction(BasicCommon):
                 os.mkdir(screen_path)
                 print('create dir : {}'.format(screen_path))
 
-    @robot_log_keyword
     def selenium_delete_elements(self, delete_locator):
         elements = self.selenium_analyse_elements(delete_locator)
         print(f'find {len(elements)} elements:{delete_locator}')
@@ -147,7 +142,6 @@ class SeleniumAction(BasicCommon):
             self.selenium_execute_js_script('arguments[0].remove();', one_element)
         print(f'delete all {len(elements)} elements:{delete_locator}')
 
-    @robot_log_keyword
     def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
         self.selenium_wait_until_find_element(input_locator)
         input_element = self.selenium_analyse_element(input_locator)
@@ -238,19 +232,20 @@ class SeleniumAction(BasicCommon):
         print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
         return re_bool
 
-    @robot_log_keyword
     def always_true(self):
         return True
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(always_true, selenium_click_element_with_offset)
+
+@decorate_class_function_exclude(robot_log_keyword)
+@decorate_class_function_exclude(debug, param=True, kwargs={'teardown_function': Basic.selenium_function_debug_continue_teardown})
+class SeleniumActionUntil(SeleniumAction):
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_click_element_with_offset)
     def selenium_click_until_available(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(always_true, selenium_check_contain_element)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_find_element(self):
         pass
 
@@ -258,15 +253,13 @@ class SeleniumAction(BasicCommon):
     def selenium_wait_until_not_find_element(self, check_exist=False):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_element)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_element)
     def selenium_click_until_find_element(self):
         pass
 
@@ -274,57 +267,48 @@ class SeleniumAction(BasicCommon):
     def selenium_click_until_not_find_element(self, check_exist=False):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(always_true, selenium_find_element_with_attribute)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_find_element_attribute(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_find_element_with_attribute)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_click_until_find_element_attribute(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(always_true, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_wait_until_attribute_change(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_click_until_attribute_change(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(always_true, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_wait_until_element_count_change(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @do_until_check(selenium_click_element_with_offset, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_click_until_element_count_change(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @wait_until_stable(selenium_check_contain_element)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @wait_until_stable(SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_stable_find_element(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @wait_until_stable(selenium_check_contain_elements)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @wait_until_stable(SeleniumAction.selenium_check_contain_elements)
     def selenium_wait_until_stable_find_elements(self):
         pass
 
@@ -332,14 +316,12 @@ class SeleniumAction(BasicCommon):
     def selenium_wait_until_stable_not_find_element(self, check_exist=False):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @wait_until_stable(selenium_find_element_with_attribute)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @wait_until_stable(SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_stable_find_element_attribute(self):
         pass
 
-    @do_when_error(selenium_take_full_screenshot)
-    @robot_log_keyword
-    @wait_until_stable(selenium_check_stable_element_attribute_unchanged_loop, init_check_function=selenium_check_stable_element_attribute_unchanged_init)
+    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
+    @wait_until_stable(SeleniumAction.selenium_check_stable_element_attribute_unchanged_loop, init_check_function=SeleniumAction.selenium_check_stable_element_attribute_unchanged_init)
     def selenium_wait_until_stable_attribute_unchanged(self):
         pass
