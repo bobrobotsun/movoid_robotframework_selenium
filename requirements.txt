@@ -6,7 +6,8 @@ selenium==4.6.0
 numpy
 robotframework
 robotframework_selenium2library
-movoid_function
+movoid_debug
+movoid_function>=1.7.1
 movoid_robotframework
 movoid_package
 opencv-python

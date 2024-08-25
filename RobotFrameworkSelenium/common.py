@@ -15,12 +15,14 @@ import cv2
 import numpy as np
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
-from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError
+from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword
 from Selenium2Library import Selenium2Library
+from movoid_function import decorate_class_function_exclude
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 
 
+@decorate_class_function_exclude(robot_log_keyword)
 class BasicCommon(RobotBasic):
     def __init__(self):
         super().__init__()
@@ -34,7 +36,6 @@ class BasicCommon(RobotBasic):
         self.window_x: float = getattr(self, 'window_x', None)
         self.window_y: float = getattr(self, 'window_y', None)
 
-    @robot_log_keyword
     def selenium_init(self, screenshot_log: bool = False):
         screenshot_log = self.robot_check_param(screenshot_log, bool, False)
         self.selenium_lib = self.built.get_library_instance('Selenium2Library')
@@ -44,7 +45,6 @@ class BasicCommon(RobotBasic):
         if screenshot_log is True:
             self.selenium_lib.set_screenshot_directory("EMBED")
 
-    @robot_log_keyword
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
         if locator.startswith('/'):
             return 'xpath', locator
@@ -66,21 +66,17 @@ class BasicCommon(RobotBasic):
         else:
             return "css selector", locator
 
-    @robot_log_keyword
     def selenium_find_elements_by_locator(self, locator) -> List[WebElement]:
         by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_elements(by, path)
 
-    @robot_log_keyword
     def selenium_find_element_by_locator(self, locator) -> WebElement:
         by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_element(by, path)
 
-    @robot_log_keyword
     def selenium_execute_js_script(self, js_code: str, *args):
         return self.driver.execute_script(js_code, *args)
 
-    @robot_log_keyword
     def analyse_color_function(self, color_function):
         re_func = None
         if callable(color_function):
@@ -94,11 +90,9 @@ class BasicCommon(RobotBasic):
             re_func = self.exchange_list3_to_color_function(color_function)
         return re_func
 
-    @robot_log_keyword
     def exchange_list3_to_color_function(self, formula_list):
         return lambda r, g, b: eval('r' + formula_list[0]) and eval('g' + formula_list[1]) and eval('b' + formula_list[2])
 
-    @robot_log_keyword
     def selenium_get_full_screenshot_path(self, screenshot_name):
         folder_name = self.get_suite_case_str().replace(' ', '_')
         full_folder_path = os.path.join(self.screenshot_root, folder_name)
@@ -107,7 +101,6 @@ class BasicCommon(RobotBasic):
             print(f'create image folder:{folder_name}')
         return os.path.join(full_folder_path, screenshot_name)
 
-    @robot_log_keyword
     def selenium_cut_screenshot(self, screenshot_locator, image_name='element-cut-image.png'):
         if self.screenshot_root is None:
             cut_image = self.selenium_log_screenshot(screenshot_locator)
@@ -128,7 +121,6 @@ class BasicCommon(RobotBasic):
         print(f'the shape of cut screenshot is {cut_image.shape}')
         return cut_image
 
-    @robot_log_keyword
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
         if self.screenshot_root is None:
             return self.selenium_log_screenshot(screenshot_locator), None
@@ -149,7 +141,6 @@ class BasicCommon(RobotBasic):
                 print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
             return tar_name, tar_path
 
-    @robot_log_keyword
     def selenium_log_screenshot(self, screenshot_locator=None):
         if screenshot_locator is None:
             img = self.driver.get_screenshot_as_base64()
@@ -170,12 +161,10 @@ class BasicCommon(RobotBasic):
         self.print(f'<img src="data:image/png;base64,{img}">', html=True)
         return cv_value
 
-    @robot_log_keyword
     def selenium_log_screenshot_path(self, screenshot_name):
         full_path = self.selenium_get_full_screenshot_path(screenshot_name)
         self.log_show_image(full_path)
 
-    @robot_log_keyword
     def selenium_analyse_image(self, image):
         if isinstance(image, str):
             image_full_path = image if os.path.isfile(image) else self.selenium_get_full_screenshot_path(image)
@@ -184,7 +173,6 @@ class BasicCommon(RobotBasic):
         else:
             return image
 
-    @robot_log_keyword
     def selenium_analyse_element(self, locator: Union[WebElement, str]) -> WebElement:
         if isinstance(locator, str):
             return self.selenium_find_element_by_locator(locator)
@@ -193,7 +181,6 @@ class BasicCommon(RobotBasic):
         else:
             return locator
 
-    @robot_log_keyword
     def selenium_analyse_elements(self, locator: Union[List[WebElement], str]) -> List[WebElement]:
         if isinstance(locator, str):
             return self.selenium_find_elements_by_locator(locator)
@@ -202,6 +189,7 @@ class BasicCommon(RobotBasic):
         else:
             return locator
 
+    @robot_no_log_keyword
     def selenium_function_debug_continue_teardown(self, function, args, kwargs, re_value, error, trace_back, has_return):
         if error:
             self.error(self.get_suite_case_str(), function.__name__, args, kwargs, type(error).__name__, error)
