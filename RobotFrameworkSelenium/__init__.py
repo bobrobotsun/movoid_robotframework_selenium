@@ -6,7 +6,11 @@
 # Time          : 2024/1/30 21:16
 # Description   : 
 """
-from .main import RobotSeleniumBasic
+from .action import SeleniumActionUntil
+
+
+class RobotSeleniumBasic(SeleniumActionUntil):
+    pass
 
 
 class RobotFrameworkSelenium(RobotSeleniumBasic):

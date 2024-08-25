@@ -190,6 +190,13 @@ class BasicCommon(RobotBasic):
             return locator
 
     @robot_no_log_keyword
+    def selenium_function_debug_raise_teardown(self, function, args, kwargs, re_value, error, trace_back, has_return):
+        if error:
+            self.selenium_take_screenshot()
+        if has_return:
+            return re_value
+
+    @robot_no_log_keyword
     def selenium_function_debug_continue_teardown(self, function, args, kwargs, re_value, error, trace_back, has_return):
         if error:
             self.error(self.get_suite_case_str(), function.__name__, args, kwargs, type(error).__name__, error)

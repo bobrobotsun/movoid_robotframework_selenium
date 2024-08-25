@@ -235,13 +235,17 @@ class SeleniumAction(Basic):
     def always_true(self):
         return True
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(always_true, selenium_click_element_with_offset)
+
+@decorate_class_function_exclude(robot_log_keyword)
+@decorate_class_function_exclude(debug, param=True, kwargs={'teardown_function': Basic.selenium_function_debug_continue_teardown})
+class SeleniumActionUntil(SeleniumAction):
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_click_element_with_offset)
     def selenium_click_until_available(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(always_true, selenium_check_contain_element)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_find_element(self):
         pass
 
@@ -250,12 +254,12 @@ class SeleniumAction(Basic):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_element)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_element)
     def selenium_click_until_find_element(self):
         pass
 
@@ -264,47 +268,47 @@ class SeleniumAction(Basic):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_contain_elements)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(always_true, selenium_find_element_with_attribute)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_find_element_attribute(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_find_element_with_attribute)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_click_until_find_element_attribute(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(always_true, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_wait_until_attribute_change(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_element_attribute_change_loop, init_check_function=selenium_check_element_attribute_change_init)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_click_until_attribute_change(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(always_true, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_wait_until_element_count_change(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @do_until_check(selenium_click_element_with_offset, selenium_check_element_count_change_loop, init_check_function=selenium_check_element_count_change_init)
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_click_until_element_count_change(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @wait_until_stable(selenium_check_contain_element)
+    @wait_until_stable(SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_stable_find_element(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @wait_until_stable(selenium_check_contain_elements)
+    @wait_until_stable(SeleniumAction.selenium_check_contain_elements)
     def selenium_wait_until_stable_find_elements(self):
         pass
 
@@ -313,11 +317,11 @@ class SeleniumAction(Basic):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @wait_until_stable(selenium_find_element_with_attribute)
+    @wait_until_stable(SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_stable_find_element_attribute(self):
         pass
 
     @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
-    @wait_until_stable(selenium_check_stable_element_attribute_unchanged_loop, init_check_function=selenium_check_stable_element_attribute_unchanged_init)
+    @wait_until_stable(SeleniumAction.selenium_check_stable_element_attribute_unchanged_loop, init_check_function=SeleniumAction.selenium_check_stable_element_attribute_unchanged_init)
     def selenium_wait_until_stable_attribute_unchanged(self):
         pass
