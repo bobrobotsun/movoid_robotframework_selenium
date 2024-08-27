@@ -1,6 +1,6 @@
-
 print(__file__)
 from RobotFrameworkSelenium import RobotSeleniumBasic, RobotFrameworkSelenium
+
 
 class Rf1(RobotSeleniumBasic):
     pass

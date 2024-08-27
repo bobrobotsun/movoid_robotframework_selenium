@@ -14,7 +14,7 @@ import time
 from typing import List, Union
 
 import cv2
-from RobotFrameworkBasic import robot_log_keyword, robot_no_log_keyword, do_until_check, do_when_error, RfError, wait_until_stable
+from RobotFrameworkBasic import robot_log_keyword, do_until_check, RfError, wait_until_stable
 from movoid_debug import debug
 from movoid_function import reset_function_default_value, decorate_class_function_exclude
 from movoid_package import importing
@@ -22,6 +22,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
 Basic = importing('..common', 'BasicCommon')
+# from ..common import BasicCommon as Basic
 
 
 @decorate_class_function_exclude(robot_log_keyword)
@@ -142,37 +143,6 @@ class SeleniumAction(Basic):
             self.selenium_execute_js_script('arguments[0].remove();', one_element)
         print(f'delete all {len(elements)} elements:{delete_locator}')
 
-    def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
-        self.selenium_wait_until_find_element(input_locator)
-        input_element = self.selenium_analyse_element(input_locator)
-        print(f'try to input ({str(input_text)}) by ({input_text})')
-        input_text = str(input_text)
-        print(f'find element:{input_element.get_attribute("outerHTML")},')
-        now_str = input_element.get_attribute('value')
-        print(f'element has text({len(now_str)}):{now_str}')
-        if now_str == str(input_text) and pass_when_same_input:
-            print(f'it has already been {now_str}, pass input')
-            input_element.send_keys(Keys.TAB)
-        else:
-            for input_retry in range(5):
-                for backspace_count in range(len(now_str) + 2):
-                    input_element.send_keys(Keys.BACKSPACE)
-                now_str = self.selenium_get_locator_attribute(input_locator, "value")
-                print(f'we try to delete all input text, and now it is >{now_str}<')
-                for i in input_text:
-                    input_element.send_keys(i)
-                    time.sleep(0.01)
-                now_str = self.selenium_get_locator_attribute(input_locator, 'value')
-                print(f'we want >{input_text}< and got >{now_str}<')
-                if str(now_str) == str(input_text):
-                    break
-                else:
-                    print(f'input failed {input_retry} time, we try to input again')
-                    time.sleep(0.1)
-            input_element.send_keys(Keys.TAB)
-            print(f'tab and leave input')
-            time.sleep(sleep_time)
-
     @robot_log_keyword(False)
     def selenium_check_contain_element(self, check_locator, check_exist=True):
         find_elements = self.selenium_analyse_elements(check_locator)
@@ -237,14 +207,13 @@ class SeleniumAction(Basic):
 
 
 @decorate_class_function_exclude(robot_log_keyword)
-@decorate_class_function_exclude(debug, param=True, kwargs={'teardown_function': Basic.selenium_function_debug_continue_teardown})
+@decorate_class_function_exclude(debug, param=True, kwargs={'teardown_function': SeleniumAction.selenium_debug_teardown})
 class SeleniumActionUntil(SeleniumAction):
 
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_click_element_with_offset)
     def selenium_click_until_available(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_find_element(self):
         pass
@@ -253,12 +222,10 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_wait_until_not_find_element(self, check_exist=False):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_element)
     def selenium_click_until_find_element(self):
         pass
@@ -267,47 +234,38 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_click_until_not_find_element(self, check_exist=False):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_elements)
     def selenium_click_until_find_elements(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_find_element_attribute(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_find_element_with_attribute)
     def selenium_click_until_find_element_attribute(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_wait_until_attribute_change(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_attribute_change_loop, init_check_function=SeleniumAction.selenium_check_element_attribute_change_init)
     def selenium_click_until_attribute_change(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_wait_until_element_count_change(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_element_count_change_loop, init_check_function=SeleniumAction.selenium_check_element_count_change_init)
     def selenium_click_until_element_count_change(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @wait_until_stable(SeleniumAction.selenium_check_contain_element)
     def selenium_wait_until_stable_find_element(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @wait_until_stable(SeleniumAction.selenium_check_contain_elements)
     def selenium_wait_until_stable_find_elements(self):
         pass
@@ -316,12 +274,41 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_wait_until_stable_not_find_element(self, check_exist=False):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @wait_until_stable(SeleniumAction.selenium_find_element_with_attribute)
     def selenium_wait_until_stable_find_element_attribute(self):
         pass
 
-    @debug(teardown_function=Basic.selenium_function_debug_continue_teardown)
     @wait_until_stable(SeleniumAction.selenium_check_stable_element_attribute_unchanged_loop, init_check_function=SeleniumAction.selenium_check_stable_element_attribute_unchanged_init)
     def selenium_wait_until_stable_attribute_unchanged(self):
         pass
+
+    def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time=1.0, pass_when_same_input=True):
+        self.selenium_wait_until_find_element(input_locator)
+        input_element = self.selenium_analyse_element(input_locator)
+        print(f'try to input ({str(input_text)}) by ({input_text})')
+        input_text = str(input_text)
+        print(f'find element:{input_element.get_attribute("outerHTML")},')
+        now_str = input_element.get_attribute('value')
+        print(f'element has text({len(now_str)}):{now_str}')
+        if now_str == str(input_text) and pass_when_same_input:
+            print(f'it has already been {now_str}, pass input')
+            input_element.send_keys(Keys.TAB)
+        else:
+            for input_retry in range(5):
+                for backspace_count in range(len(now_str) + 2):
+                    input_element.send_keys(Keys.BACKSPACE)
+                now_str = self.selenium_get_locator_attribute(input_locator, "value")
+                print(f'we try to delete all input text, and now it is >{now_str}<')
+                for i in input_text:
+                    input_element.send_keys(i)
+                    time.sleep(0.01)
+                now_str = self.selenium_get_locator_attribute(input_locator, 'value')
+                print(f'we want >{input_text}< and got >{now_str}<')
+                if str(now_str) == str(input_text):
+                    break
+                else:
+                    print(f'input failed {input_retry} time, we try to input again')
+                    time.sleep(0.1)
+            input_element.send_keys(Keys.TAB)
+            print(f'tab and leave input')
+            time.sleep(sleep_time)
