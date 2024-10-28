@@ -3,6 +3,7 @@ Resource          do1.resource
 
 *** Test Cases ***
 01_do1
+    Go To    http://www.baidu.com
     Robot Check Param    467    str
     Robot Check Param    1    int
     Robot Check Param    1   float
@@ -12,6 +13,8 @@ Resource          do1.resource
     Robot Check Param    [1,2,3]    list
     Robot Check Param    {1:1,2:2}    dict
     Selenium Log Screenshot
+    selenium_get_element_color_list
+
 #    Log    ${_config}[a]
 #    Func1    ${_config}[a]
 

@@ -7,6 +7,7 @@
 # Description   : 
 """
 import base64
+import inspect
 import math
 import os
 from typing import List, Tuple, Union, Any
@@ -141,7 +142,7 @@ class BasicCommon(RobotBasic):
                 print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
             return tar_name, tar_path
 
-    def selenium_log_screenshot(self, screenshot_locator=None):
+    def selenium_log_screenshot(self, screenshot_locator=None) -> np.ndarray:
         if screenshot_locator is None:
             img = self.driver.get_screenshot_as_base64()
             cv_value = np.frombuffer(base64.b64decode(img), np.uint8)

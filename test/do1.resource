@@ -5,15 +5,14 @@ Library            Selenium2Library
 *** Keywords ***
 suite-setup
     Create Webdriver    Chrome
-    Config Init
     Selenium Init
 
 test-setup
-    Config Use Suite Case List
+    Print    1
 
 test-setup2
-    Log    123
+    Print    123
     
 func1
     [Arguments]    ${param1}
-    Log    ${param1}
+    Print    ${param1}
