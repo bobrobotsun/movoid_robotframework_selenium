@@ -22,6 +22,7 @@ jobs:
     steps:
       - uses: browser-actions/setup-chrome@v1
         with:
+          chrome-version: 120
           install-chromedriver: true
           install-dependencies: true
       - uses: actions/checkout@v4
