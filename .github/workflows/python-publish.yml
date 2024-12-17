@@ -11,8 +11,6 @@ name: Build & Upload Python Package
 on:
   release:
     types: [published]
-  schedule:
-    -cron: '0 0 * * *'
 
 permissions:
   contents: read
