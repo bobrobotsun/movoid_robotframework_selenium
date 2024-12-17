@@ -8,5 +8,5 @@
 """
 from movoid_package import Stub
 
-# Stub(r'E:\000develop\movoid_robotframework_selenium\RobotFrameworkSelenium\common.py')
-# Stub(r'E:\000develop\movoid_robotframework_selenium\RobotFrameworkSelenium\action\action.py')
+Stub(r'E:\000develop\movoid_robotframework_selenium\RobotFrameworkSelenium\common.py', 'RobotFrameworkSelenium.common')
+Stub(r'E:\000develop\movoid_robotframework_selenium\RobotFrameworkSelenium\action\action.py', 'RobotFrameworkSelenium.action.action')

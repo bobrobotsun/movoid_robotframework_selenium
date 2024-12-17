@@ -8,6 +8,8 @@ on:
     branches: [ "master" , "test" , "dev" ]
   pull_request:
     branches: [ "master" ]
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   build:
@@ -17,8 +19,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
-
     steps:
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 120
+          install-chromedriver: true
+          install-dependencies: true
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
