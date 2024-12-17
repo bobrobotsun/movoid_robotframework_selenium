@@ -11,7 +11,7 @@ import os
 import pathlib
 import re
 import time
-from typing import List, Union
+from typing import List, Union, Any
 
 import cv2
 import numpy as np
@@ -39,7 +39,7 @@ class SeleniumAction(Basic):
         """
         return self.selenium_take_screenshot(image_name=screenshot_name)
 
-    def selenium_click_element(self, click_locator, operate='click'):
+    def selenium_click_element(self, click_locator, operate='click') -> bool:
         """
         点击某个元素，可以双击
         :param click_locator:点击元素的位置，可以使用locator或者Element
@@ -158,7 +158,7 @@ class SeleniumAction(Basic):
             raise RfError(f'fail to find <{find_locator}> with <{find_attribute}> is <{find_value}>(re={regex},bool={check_bool})')
         return find_elements[0]
 
-    def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText', attribute_type=''):
+    def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText', attribute_type='') -> Any:
         """
         获取目标元素的属性的值
         :param target_locator: 目标元素或locator
@@ -187,7 +187,7 @@ class SeleniumAction(Basic):
                 os.mkdir(screen_path)
                 print('create dir : {}'.format(screen_path))
 
-    def selenium_delete_elements(self, delete_locator):
+    def selenium_delete_elements(self, delete_locator) -> None:
         """
         在页面上把某个/些元素删除掉
         :param delete_locator: 待删除的元素或locator
@@ -226,14 +226,14 @@ class SeleniumAction(Basic):
         return find_elements_num == check_count
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type=''):
+    def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type='') -> bool:
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
         print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
         return False
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute='innerText', attribute_type=''):
+    def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute='innerText', attribute_type='') -> bool:
         """
         :param check_locator: 待检查的元素或locator
         :param check_attribute: 检查的目标属性名
@@ -246,13 +246,13 @@ class SeleniumAction(Basic):
         return re_bool
 
     @robot_log_keyword(False)
-    def selenium_check_element_count_change_init(self, check_locator):
+    def selenium_check_element_count_change_init(self, check_locator) -> bool:
         self._check_element_count_value = len(self.selenium_analyse_elements(check_locator))
         print(f'we find {check_locator} count of {self._check_element_count_value}')
         return False
 
     @robot_log_keyword(False)
-    def selenium_check_element_count_change_loop(self, check_locator):
+    def selenium_check_element_count_change_loop(self, check_locator) -> bool:
         """
         :param check_locator: 待检查的元素或locator
         """
@@ -262,13 +262,13 @@ class SeleniumAction(Basic):
         return re_bool
 
     @robot_log_keyword(False)
-    def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute='innerText'):
+    def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute='innerText') -> bool:
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
         return False
 
     @robot_log_keyword(False)
-    def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute='innerText'):
+    def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute='innerText') -> bool:
         """
         :param check_locator: 待检查的元素或locator
         :param check_attribute: 检查的目标属性名
@@ -281,7 +281,7 @@ class SeleniumAction(Basic):
         print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
         return re_bool
 
-    def always_true(self):
+    def always_true(self) -> bool:
         return True
 
 

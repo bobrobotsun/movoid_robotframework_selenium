@@ -10,13 +10,13 @@ import base64
 import inspect
 import math
 import os
-from typing import List, Tuple, Union, Any
+from typing import List, Tuple, Union, Any, Callable
 
 import cv2
 import numpy as np
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
-from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword
+from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword, RUN
 from Selenium2Library import Selenium2Library
 from movoid_function import decorate_class_function_exclude
 from selenium.webdriver import ActionChains
@@ -37,16 +37,33 @@ class BasicCommon(RobotBasic):
         self.window_x: float = getattr(self, 'window_x', None)
         self.window_y: float = getattr(self, 'window_y', None)
 
-    def selenium_init(self, screenshot_log: bool = False):
-        screenshot_log = self.robot_check_param(screenshot_log, bool, False)
-        self.selenium_lib = self.built.get_library_instance('Selenium2Library')
-        self.driver = self.selenium_lib.driver
-        self.action_chains = ActionChains(self.driver)
-        self.screenshot_root = None if screenshot_log else ('.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory)
-        if screenshot_log is True:
-            self.selenium_lib.set_screenshot_directory("EMBED")
+    if RUN == 'python':
+        def selenium_init(self, screenshot_log: bool = False):
+            """
+            :param screenshot_log: 是否将截屏默认放在log中
+            """
+            screenshot_log = self.robot_check_param(screenshot_log, bool, False)
+            self.action_chains = ActionChains(self.driver)
+            self.screenshot_root = None if screenshot_log else '.'
+    else:
+        def selenium_init(self, screenshot_log: bool = False):
+            """
+            :param screenshot_log: 是否将截屏默认放在log中
+            """
+            screenshot_log = self.robot_check_param(screenshot_log, bool, False)
+            self.selenium_lib = self.built.get_library_instance('Selenium2Library')
+            self.driver = self.selenium_lib.driver
+            self.action_chains = ActionChains(self.driver)
+            self.screenshot_root = None if screenshot_log else ('.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory)
+            if screenshot_log is True:
+                self.selenium_lib.set_screenshot_directory("EMBED")
 
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
+        """
+        将locator文本解析为by,path，方便find element
+        :param locator: 合并的locator
+        :return:
+        """
         if locator.startswith('/'):
             return 'xpath', locator
         elif '=' in locator:
@@ -68,17 +85,31 @@ class BasicCommon(RobotBasic):
             return "css selector", locator
 
     def selenium_find_elements_by_locator(self, locator) -> List[WebElement]:
+        """
+        :param locator: by=path
+        """
         by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_elements(by, path)
 
     def selenium_find_element_by_locator(self, locator) -> WebElement:
+        """
+        :param locator: by=path
+        """
         by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_element(by, path)
 
-    def selenium_execute_js_script(self, js_code: str, *args):
+    def selenium_execute_js_script(self, js_code: str, *args) -> Any:
+        """
+        :param js_code: javascript脚本文本
+        :param args: 其他相应的参数
+        """
         return self.driver.execute_script(js_code, *args)
 
-    def analyse_color_function(self, color_function):
+    def analyse_color_function(self, color_function) -> Callable[[int, int, int], bool]:
+        """
+        :param color_function: 输入的符号+数值，例如 >60,>60,>60
+        :return: 相应的判定函数
+        """
         re_func = None
         if callable(color_function):
             return color_function
@@ -91,10 +122,18 @@ class BasicCommon(RobotBasic):
             re_func = self.exchange_list3_to_color_function(color_function)
         return re_func
 
-    def exchange_list3_to_color_function(self, formula_list):
+    def exchange_list3_to_color_function(self, formula_list) -> Callable[[int, int, int], bool]:
+        """
+        :param formula_list: 已经解析清晰的列表
+        :return: 相应的判定函数
+        """
         return lambda r, g, b: eval('r' + formula_list[0]) and eval('g' + formula_list[1]) and eval('b' + formula_list[2])
 
-    def selenium_get_full_screenshot_path(self, screenshot_name):
+    def selenium_get_full_screenshot_path(self, screenshot_name) -> str:
+        """
+        :param screenshot_name: 截图存储文件夹名
+        :return: 截屏文件夹全路径
+        """
         folder_name = self.get_suite_case_str().replace(' ', '_')
         full_folder_path = os.path.join(self.screenshot_root, folder_name)
         if not os.path.exists(full_folder_path):
@@ -102,7 +141,11 @@ class BasicCommon(RobotBasic):
             print(f'create image folder:{folder_name}')
         return os.path.join(full_folder_path, screenshot_name)
 
-    def selenium_cut_screenshot(self, screenshot_locator, image_name='element-cut-image.png'):
+    def selenium_cut_screenshot(self, screenshot_locator=None, image_name='element-cut-image.png'):
+        """
+        :param screenshot_locator: 截图目标，不输入则全浏览器截屏
+        :param image_name: 存储的文件名称
+        """
         if self.screenshot_root is None:
             cut_image = self.selenium_log_screenshot(screenshot_locator)
         else:
@@ -123,6 +166,11 @@ class BasicCommon(RobotBasic):
         return cut_image
 
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
+        """
+        :param screenshot_locator: 截图目标，不输入则全浏览器截屏
+        :param image_name: 存储的文件名称
+        :param rename: 如果重名了，是否通过增加序号的方式重命名
+        """
         if self.screenshot_root is None:
             return self.selenium_log_screenshot(screenshot_locator), None
         else:
@@ -135,14 +183,17 @@ class BasicCommon(RobotBasic):
                 tar_name = f'{name}-{ind}{post}'
                 tar_path = self.selenium_get_full_screenshot_path(tar_name)
             if screenshot_locator is None:
-                self.selenium_lib.capture_page_screenshot(tar_path)
+                self.driver.save_screenshot(tar_path)
                 print(f'take a full window screenshot:{tar_name}')
             else:
-                self.selenium_lib.capture_element_screenshot(screenshot_locator, tar_path)
+                self.selenium_find_element_by_locator(screenshot_locator).screenshot(tar_path)
                 print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
             return tar_name, tar_path
 
     def selenium_log_screenshot(self, screenshot_locator=None) -> np.ndarray:
+        """
+        :param screenshot_locator: 截图目标，不输入则全浏览器截屏
+        """
         if screenshot_locator is None:
             img = self.driver.get_screenshot_as_base64()
             cv_value = np.frombuffer(base64.b64decode(img), np.uint8)
@@ -162,11 +213,17 @@ class BasicCommon(RobotBasic):
         self.print(f'<img src="data:image/png;base64,{img}">', html=True)
         return cv_value
 
-    def selenium_log_screenshot_path(self, screenshot_name):
+    def selenium_log_screenshot_path(self, screenshot_name) -> None:
+        """
+        :param screenshot_name: 截图存储文件夹名称
+        """
         full_path = self.selenium_get_full_screenshot_path(screenshot_name)
         self.log_show_image(full_path)
 
     def selenium_analyse_image(self, image):
+        """
+        :param image: 目标图片的路径
+        """
         if isinstance(image, str):
             image_full_path = image if os.path.isfile(image) else self.selenium_get_full_screenshot_path(image)
             print(f'try to read image:{image_full_path}')
@@ -175,6 +232,9 @@ class BasicCommon(RobotBasic):
             return image
 
     def selenium_analyse_element(self, locator: Union[WebElement, str]) -> WebElement:
+        """
+        :param locator: locator或者element
+        """
         if isinstance(locator, str):
             return self.selenium_find_element_by_locator(locator)
         elif isinstance(locator, list):
@@ -183,6 +243,9 @@ class BasicCommon(RobotBasic):
             return locator
 
     def selenium_analyse_elements(self, locator: Union[List[WebElement], str]) -> List[WebElement]:
+        """
+        :param locator: locator或者elements
+        """
         if isinstance(locator, str):
             return self.selenium_find_elements_by_locator(locator)
         elif isinstance(locator, WebElement):
