@@ -21,6 +21,9 @@ jobs:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
     steps:
       - uses: browser-actions/setup-chrome@v1
+        with:
+          install-chromedriver: true
+          install-dependencies: true
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
