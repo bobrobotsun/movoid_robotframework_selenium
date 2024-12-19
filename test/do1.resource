@@ -4,8 +4,11 @@ Library            Selenium2Library
 
 *** Keywords ***
 suite-setup
-    Create Webdriver    Chrome
-    Selenium Init
+    selenium_init
+    selenium Create webdriver
+
+suite-teardown
+    Selenium Close Webdriver
 
 test-setup
     Print    1

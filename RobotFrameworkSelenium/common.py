@@ -21,6 +21,7 @@ from Selenium2Library import Selenium2Library
 from movoid_function import decorate_class_function_exclude
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
+from selenium import webdriver
 
 
 @decorate_class_function_exclude(robot_log_keyword)
@@ -38,25 +39,36 @@ class BasicCommon(RobotBasic):
         self.window_y: float = getattr(self, 'window_y', None)
 
     if RUN == 'python':
-        def selenium_init(self, screenshot_log: bool = False):
+        def selenium_init(self, screenshot_dir: str = '.'):
             """
-            :param screenshot_log: 是否将截屏默认放在log中
+            :param screenshot_dir: screenshot存储路径
             """
-            screenshot_log = self.robot_check_param(screenshot_log, bool, False)
+            self.screenshot_root = screenshot_dir if screenshot_dir else None
+
+        def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
+            """
+            :param driver_name: Chrome,Ie,Edge,Firefox,Safari,WebKitGTK,WPEWebKit
+            :param kwargs: 其他driver参数
+            """
+            self.driver = getattr(webdriver, driver_name)(**kwargs)
             self.action_chains = ActionChains(self.driver)
-            self.screenshot_root = None if screenshot_log else '.'
+
+        def selenium_close_webdriver(self):
+            self.driver.close()
     else:
-        def selenium_init(self, screenshot_log: bool = False):
-            """
-            :param screenshot_log: 是否将截屏默认放在log中
-            """
-            screenshot_log = self.robot_check_param(screenshot_log, bool, False)
+        def selenium_init(self, screenshot_dir: str = '.'):
             self.selenium_lib = self.built.get_library_instance('Selenium2Library')
+            self.screenshot_root = (screenshot_dir if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory) if screenshot_dir else None
+            if not screenshot_dir:
+                self.selenium_lib.set_screenshot_directory("EMBED")
+
+        def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
+            self.selenium_lib.create_webdriver(driver_name=driver_name, **kwargs)
             self.driver = self.selenium_lib.driver
             self.action_chains = ActionChains(self.driver)
-            self.screenshot_root = None if screenshot_log else ('.' if self.selenium_lib.screenshot_root_directory is None else self.selenium_lib.screenshot_root_directory)
-            if screenshot_log is True:
-                self.selenium_lib.set_screenshot_directory("EMBED")
+
+        def selenium_close_webdriver(self):
+            self.selenium_lib.close_all_browsers()
 
     def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
         """

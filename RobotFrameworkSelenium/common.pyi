@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import robot
 import selenium
+import selenium.webdriver as webdriver
 import RobotFrameworkBasic
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
@@ -32,9 +33,25 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		self.inner_coordinate: typing.Tuple[float] =  getattr(self, 'inner_coordinate', None)
 		self.window_x: float =  getattr(self, 'window_x', None)
 		self.window_y: float =  getattr(self, 'window_y', None)
-	def selenium_init(self, screenshot_log: bool = False, _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+	def selenium_init(self, screenshot_dir: str = '.', _return_when_error = None, _log_keyword_structure = True, _return_name = None):
 		"""
-		:param screenshot_log: 是否将截屏默认放在log中
+		:param screenshot_dir: screenshot存储路径
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		"""
+		...
+	def selenium_create_webdriver(self, driver_name: str = 'Chrome', _return_when_error = None, _log_keyword_structure = True, _return_name = None, **kwargs):
+		"""
+		:param driver_name: Chrome,Ie,Edge,Firefox,Safari,WebKitGTK,WPEWebKit
+		:param kwargs: 其他driver参数
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		"""
+		...
+	def selenium_close_webdriver(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+		"""
 		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
 		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
@@ -66,7 +83,7 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
 		"""
 		...
-	def selenium_execute_js_script(self, js_code: str, args, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.Any:
+	def selenium_execute_js_script(self, js_code: str, *args, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.Any:
 		"""
 		:param js_code: javascript脚本文本
 		:param args: 其他相应的参数

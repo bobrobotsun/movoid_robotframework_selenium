@@ -20,3 +20,7 @@ class Test_package:
         rsb = RobotSeleniumBasic()
         rf1 = Rf1()
         rf2 = Rf2()
+        rfs.selenium_init()
+        rfs.selenium_create_webdriver()
+        rfs.driver.get('http://www.baidu.com')
+        rfs.selenium_close_webdriver()
