@@ -20,6 +20,12 @@ jobs:
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Check network and package sources
+        run: |
+          ping -c 3 google.com
+          sudo apt-get update
       - uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 120
