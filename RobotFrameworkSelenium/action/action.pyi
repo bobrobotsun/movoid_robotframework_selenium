@@ -258,6 +258,26 @@ class SeleniumActionUntil(SeleniumAction):
 		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
 		"""
 		...
+	def selenium_wait_until_find_elements(self, check_locator, check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直等待，直到在页面上寻找到某些元素达到某个数量为止
+		******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		检查页面内某些元素的总数是否为特定的值
+		:param check_locator: 目标元素或locator
+		:param check_count: 元素的数量
+		:return: 搜索结果。只有正好数量相同才会返回True
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		"""
+		...
 	def selenium_wait_until_not_find_element(self, check_locator, check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		:param check_exist: 现在默认值为False

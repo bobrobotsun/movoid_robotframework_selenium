@@ -305,6 +305,14 @@ class SeleniumActionUntil(SeleniumAction):
         """
         pass
 
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_elements)
+    def selenium_wait_until_find_elements(self):
+        """
+        一直等待，直到在页面上寻找到某些元素达到某个数量为止
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
     @reset_function_default_value(selenium_wait_until_find_element)
     def selenium_wait_until_not_find_element(self, check_exist=False):
         """
