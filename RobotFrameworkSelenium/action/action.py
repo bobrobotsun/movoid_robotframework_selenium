@@ -92,7 +92,7 @@ class SeleniumAction(Basic):
         tar_elements = self.selenium_analyse_elements(check_locator)
         tar_exist = False
         for i_element, one_element in enumerate(tar_elements):
-            tar_value = self.selenium_get_locator_attribute(one_element, check_attribute, attribute_type)
+            tar_value = self.selenium_get_element_attribute(one_element, check_attribute, attribute_type)
             print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
             if regex:
                 check_result = bool(re.search(check_value, tar_value))
@@ -125,7 +125,7 @@ class SeleniumAction(Basic):
             print(f'find {len(tar_elements)} elements <{find_locator}> first')
             for i_element, one_element in enumerate(tar_elements):
                 try:
-                    tar_value = self.selenium_get_locator_attribute(one_element, find_attribute, attribute_type)
+                    tar_value = self.selenium_get_element_attribute(one_element, find_attribute, attribute_type)
                 except:
                     print(f'{find_attribute} of <{find_locator}>({i_element}) can not be read, pass it')
                     continue
@@ -158,7 +158,7 @@ class SeleniumAction(Basic):
             raise RfError(f'fail to find <{find_locator}> with <{find_attribute}> is <{find_value}>(re={regex},bool={check_bool})')
         return find_elements[0]
 
-    def selenium_get_locator_attribute(self, target_locator, target_attribute='innerText', attribute_type='') -> Any:
+    def selenium_get_element_attribute(self, target_locator, target_attribute='innerText', attribute_type='') -> Any:
         """
         获取目标元素的属性的值
         :param target_locator: 目标元素或locator
@@ -177,6 +177,30 @@ class SeleniumAction(Basic):
             re_value = tar_element.get_attribute(target_attribute)
             re_value = tar_element.get_dom_attribute(target_attribute) if re_value is None else re_value
             re_value = tar_element.get_property(target_attribute) if re_value is None else re_value
+        return re_value
+
+    def selenium_get_elements_attribute(self, target_locator, target_attribute='innerText', attribute_type='') -> List[Any]:
+        """
+        获取所有目标元素的属性的值
+        :param target_locator: 目标元素或locator
+        :param target_attribute: 属性名称
+        :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+        :return: 所有目标元素的该属性的值组合成的列表
+        """
+        tar_elements = self.selenium_analyse_elements(target_locator)
+        re_value = []
+        for element_index, tar_element in enumerate(tar_elements):
+            if attribute_type == 'attribute':
+                this_value = tar_element.get_attribute(target_attribute)
+            elif attribute_type == 'property':
+                this_value = tar_element.get_property(target_attribute)
+            elif attribute_type == 'dom':
+                this_value = tar_element.get_dom_attribute(target_attribute)
+            else:
+                this_value = tar_element.get_attribute(target_attribute)
+                this_value = tar_element.get_dom_attribute(target_attribute) if this_value is None else this_value
+                this_value = tar_element.get_property(target_attribute) if this_value is None else this_value
+            re_value.append(this_value)
         return re_value
 
     def selenium_new_screenshot_folder(self):
@@ -228,7 +252,7 @@ class SeleniumAction(Basic):
     @robot_log_keyword(False)
     def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type='') -> bool:
         tar_element = self.selenium_analyse_element(check_locator)
-        self._check_element_attribute_change_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
+        self._check_element_attribute_change_value = self.selenium_get_element_attribute(tar_element, check_attribute, attribute_type)
         print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
         return False
 
@@ -240,7 +264,7 @@ class SeleniumAction(Basic):
         :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
         """
         tar_element = self.selenium_analyse_element(check_locator)
-        temp_value = self.selenium_get_locator_attribute(tar_element, check_attribute, attribute_type)
+        temp_value = self.selenium_get_element_attribute(tar_element, check_attribute, attribute_type)
         re_bool = self._check_element_attribute_change_value != temp_value
         print(f'we find {check_attribute} of {check_locator} is {temp_value}{"!=" if re_bool else "=="}{self._check_element_attribute_change_value}')
         return re_bool
@@ -454,12 +478,12 @@ class SeleniumActionUntil(SeleniumAction):
             for input_retry in range(5):
                 for backspace_count in range(len(now_str) + 2):
                     input_element.send_keys(Keys.BACKSPACE)
-                now_str = self.selenium_get_locator_attribute(input_locator, "value")
+                now_str = self.selenium_get_element_attribute(input_locator, "value")
                 print(f'we try to delete all input text, and now it is >{now_str}<')
                 for i in input_text:
                     input_element.send_keys(i)
                     time.sleep(0.01)
-                now_str = self.selenium_get_locator_attribute(input_locator, 'value')
+                now_str = self.selenium_get_element_attribute(input_locator, 'value')
                 print(f'we want >{input_text}< and got >{now_str}<')
                 if str(now_str) == str(input_text):
                     break
