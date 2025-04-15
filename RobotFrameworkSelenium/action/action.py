@@ -65,15 +65,17 @@ class SeleniumAction(Basic):
         :param click_locator: 目标元素或者locator
         :param x: 横坐标像素数
         :param y: 纵坐标像素数
-        :param operate: 默认点击，doubleclick为双击
+        :param operate: 默认点击，double_click为双击，right_click为右键点击
         :return: True
         """
         tar_element = self.selenium_analyse_element(click_locator)
         self.action_chains.move_to_element_with_offset(tar_element, x, y)
         if operate == 'click':
             self.action_chains.click()
-        elif operate in ('double_click', 'doubleclick'):
+        elif operate in ('double_click', 'doubleclick', 'double click'):
             self.action_chains.double_click()
+        elif operate in ('right', 'rightclick', 'right_click', 'right click'):
+            self.action_chains.context_click()
         self.action_chains.perform()
         return True
 
