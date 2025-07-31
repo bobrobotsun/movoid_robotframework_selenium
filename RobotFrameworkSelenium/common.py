@@ -153,10 +153,11 @@ class BasicCommon(RobotBasic):
             print(f'create image folder:{folder_name}')
         return os.path.join(full_folder_path, screenshot_name)
 
-    def selenium_cut_screenshot(self, screenshot_locator=None, image_name='element-cut-image.png'):
+    def selenium_cut_screenshot(self, screenshot_locator=None, image_name='element-cut-image.png', _show_return_info=False):
         """
         :param screenshot_locator: 截图目标，不输入则全浏览器截屏
         :param image_name: 存储的文件名称
+        :param _show_return_info: 是否显示返回值，默认不显示
         """
         if self.screenshot_root is None:
             cut_image = self.selenium_log_screenshot(screenshot_locator)
@@ -177,11 +178,12 @@ class BasicCommon(RobotBasic):
         print(f'the shape of cut screenshot is {cut_image.shape}')
         return cut_image
 
-    def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True):
+    def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True, _show_return_info=False):
         """
         :param screenshot_locator: 截图目标，不输入则全浏览器截屏
         :param image_name: 存储的文件名称
         :param rename: 如果重名了，是否通过增加序号的方式重命名
+        :param _show_return_info: 是否显示返回值，默认不显示
         """
         if self.screenshot_root is None:
             return self.selenium_log_screenshot(screenshot_locator), None
@@ -202,9 +204,10 @@ class BasicCommon(RobotBasic):
                 print(f'take a DOM({screenshot_locator}) screenshot:{tar_name}')
             return tar_name, tar_path
 
-    def selenium_log_screenshot(self, screenshot_locator=None) -> np.ndarray:
+    def selenium_log_screenshot(self, screenshot_locator=None, _show_return_info=False) -> np.ndarray:
         """
         :param screenshot_locator: 截图目标，不输入则全浏览器截屏
+        :param _show_return_info: 是否显示返回值，默认不显示
         """
         if screenshot_locator is None:
             img = self.driver.get_screenshot_as_base64()
