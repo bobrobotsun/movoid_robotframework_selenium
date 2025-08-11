@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name='movoid_robotframework_selenium',
-    version='1.3.8',
+    version='1.3.9',
     packages=find_packages(),
     url='',
     license='',
@@ -21,5 +21,6 @@ setup(
                       'robotframework_selenium2library',
                       'movoid_package',
                       'opencv-python',
+                      'lxml',
                       ],
 )

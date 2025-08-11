@@ -252,6 +252,33 @@ class SeleniumAction(Basic):
         return find_elements_num == check_count
 
     @robot_log_keyword(False)
+    def selenium_html_check_contain_element(self, check_locator, check_exist: bool = True) -> bool:
+        """
+        使用html方式检查页面内是否存在某个元素
+        :param check_locator: 目标元素或locator
+        :param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+        :return: 搜素结果
+        """
+        find_elements = self.selenium_html_find_elements_by_locator(check_locator)
+        find_elements_bool = len(find_elements) > 0
+        print(f'we find {find_elements_bool}→{check_exist} {check_locator}')
+        return find_elements_bool == check_exist
+
+    @robot_log_keyword(False)
+    def selenium_html_check_contain_elements(self, check_locator, check_count: int = 1) -> bool:
+        """
+        使用html方式检查页面内某些元素的总数是否为特定的值
+        :param check_locator: 目标元素或locator
+        :param check_count: 元素的数量
+        :return: 搜索结果。只有正好数量相同才会返回True
+        """
+        check_count = int(check_count)
+        find_elements = self.selenium_html_find_elements_by_locator(check_locator)
+        find_elements_num = len(find_elements)
+        print(f'we find {find_elements_num}→{check_count} {check_locator}')
+        return find_elements_num == check_count
+
+    @robot_log_keyword(False)
     def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type='') -> bool:
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = self.selenium_get_element_attribute(tar_element, check_attribute, attribute_type)
@@ -333,6 +360,22 @@ class SeleniumActionUntil(SeleniumAction):
 
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_elements)
     def selenium_wait_until_find_elements(self):
+        """
+        一直等待，直到在页面上寻找到某些元素达到某个数量为止
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_html_check_contain_element)
+    def selenium_html_wait_until_find_element(self):
+        """
+        一直等待，直到在页面上寻找到某个元素为止
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_html_check_contain_elements)
+    def selenium_html_wait_until_find_elements(self):
         """
         一直等待，直到在页面上寻找到某些元素达到某个数量为止
         ******************** 下方是辅助函数和参数，请忽略return参数 ********************

@@ -83,6 +83,22 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
 		"""
 		...
+	def selenium_html_find_elements_by_locator(self, locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.List[selenium.webdriver.remote.webelement.WebElement]:
+		"""
+		:param locator: by=path
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		"""
+		...
+	def selenium_html_find_element_by_locator(self, locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> selenium.webdriver.remote.webelement.WebElement:
+		"""
+		:param locator: by=path
+		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		"""
+		...
 	def selenium_execute_js_script(self, js_code: str, *args, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.Any:
 		"""
 		:param js_code: javascript脚本文本

@@ -18,6 +18,7 @@ import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
 from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword, RUN
 from Selenium2Library import Selenium2Library
+from lxml import html
 from movoid_function import decorate_class_function_exclude
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
@@ -110,6 +111,37 @@ class BasicCommon(RobotBasic):
         by, path = self.selenium_analyse_locator(locator)
         return self.driver.find_element(by, path)
 
+    def selenium_html_find_element_by_locator(self, locator) -> html.HtmlElement:
+        """
+        :param locator: by=path
+        """
+        results = self.selenium_html_find_elements_by_locator(locator)
+        if len(results) >= 1:
+            return results[0]
+        else:
+            raise KeyError(f'cannot find any element by {locator}')
+
+    def selenium_html_find_elements_by_locator(self, locator) -> List[html.HtmlElement]:
+        """
+        使用html的方法检查页面内是否存在某个元素
+        :param locator: 目标元素或locator
+        :return: 搜素结果
+        """
+        by, path = self.selenium_analyse_locator(locator)
+        html_text = self.driver.page_source
+        html_tree: html.HtmlElement = html.fromstring(html_text)
+        if by == 'css selector':
+            results = html_tree.cssselect(path)
+        elif by == 'xpath':
+            results = html_tree.xpath(path)
+        elif by == 'id':
+            results = html_tree.xpath(rf'//*[@id="{path}"]')
+        elif by == 'class name':
+            results = html_tree.find_class(path)
+        else:
+            raise ValueError(f'do not support {by},only [css selector/xpath/id/class name] accept')
+        return results
+
     def selenium_execute_js_script(self, js_code: str, *args) -> Any:
         """
         :param js_code: javascript脚本文本
@@ -177,6 +209,9 @@ class BasicCommon(RobotBasic):
                 cv2.imwrite(tar_path_split[0] + '(cut)' + tar_path_split[1], cut_image)
         print(f'the shape of cut screenshot is {cut_image.shape}')
         return cut_image
+
+    def test123(self):
+        self.selenium_log_screenshot(False, False)
 
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True, _show_return_info=False):
         """

@@ -11,3 +11,4 @@ movoid_function>=1.7.1
 movoid_robotframework
 movoid_package
 opencv-python
+lxml
