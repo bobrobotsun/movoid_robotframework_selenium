@@ -16,6 +16,7 @@ Resource          do1.resource
     Selenium Log Screenshot
     selenium_get_element_color_list
     Selenium Html Wait Until Find Element    //div
+    Selenium Wait Until Find Multiple Elements Together    [["//div"],["#s_is_result_css"]]
 
 #    Log    ${_config}[a]
 #    Func1    ${_config}[a]

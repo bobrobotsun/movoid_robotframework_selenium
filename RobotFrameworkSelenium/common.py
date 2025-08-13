@@ -211,7 +211,7 @@ class BasicCommon(RobotBasic):
         return cut_image
 
     def test123(self):
-        self.selenium_log_screenshot(False, False)
+        self.selenium_log_screenshot(None, False)
 
     def selenium_take_screenshot(self, screenshot_locator=None, image_name='python-screenshot.png', rename=True, _show_return_info=False):
         """

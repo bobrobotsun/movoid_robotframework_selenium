@@ -12,3 +12,4 @@ movoid_robotframework
 movoid_package
 opencv-python
 lxml
+cssselect

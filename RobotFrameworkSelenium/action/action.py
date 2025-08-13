@@ -11,7 +11,7 @@ import os
 import pathlib
 import re
 import time
-from typing import List, Union, Any
+from typing import List, Union, Any, Dict
 
 import cv2
 import numpy as np
@@ -30,6 +30,7 @@ class SeleniumAction(Basic):
         super().__init__()
         self._check_element_attribute_change_value: Union[str, None] = None
         self._check_element_count_value: Union[int, None] = None
+        self._check_contain_multiple_elements_ever_value: Union[List[bool], None] = None
 
     def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
         """
@@ -80,7 +81,7 @@ class SeleniumAction(Basic):
         return True
 
     @robot_log_keyword(False)
-    def selenium_check_element_attribute(self, check_locator, check_value, check_attribute='innerText', attribute_type='', regex: bool = True, check_bool: bool = True):
+    def selenium_check_contain_element_attribute(self, check_locator, check_value, check_attribute='innerText', attribute_type='', regex: bool = True, check_bool: bool = True, check_exist: bool = True):
         """
         检查目标元素的属性是否满足某个条件
         :param check_locator: 检查目标的元素或locator
@@ -88,24 +89,45 @@ class SeleniumAction(Basic):
         :param check_attribute: 属性名
         :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
         :param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
-        :param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
+        :param check_bool: 是否为满足attribute的条件，默认为找到满足attribute条件的元素。如果输入False，那么需要找到locator元素中attribute不满足条件的元素
+        :param check_exist: 按照以上条件来看，是否应当至少存在一个这样 的元素。如果输入False，俺么需要一个都没有
         :return: 判定结果
         """
-        tar_elements = self.selenium_analyse_elements(check_locator)
-        tar_exist = False
-        for i_element, one_element in enumerate(tar_elements):
-            tar_value = self.selenium_get_element_attribute(one_element, check_attribute, attribute_type)
-            print(f'{check_attribute} of <{check_locator}>({i_element}) is:{tar_value}')
-            if regex:
-                check_result = bool(re.search(check_value, tar_value))
-                print(f'{check_result}: <{check_value}> in <{tar_value}>')
-            else:
-                check_result = check_value == tar_value
-                print(f'{check_result}: <{check_value}> == <{tar_value}>')
-            tar_exist = tar_exist or check_result == check_bool
-            print(f'{i_element}/{len(tar_elements)} is {check_result} -> {check_result == check_bool}')
-        print(f'check result is:{tar_exist}')
-        return tar_exist
+        find_elements = self.selenium_find_elements_with_attribute(
+            find_locator=check_locator, find_value=check_value, find_attribute=check_attribute, attribute_type=attribute_type, regex=regex, check_bool=check_bool)
+        return bool(check_exist) != bool(len(find_elements) >= 1)
+
+    @robot_log_keyword(False)
+    def selenium_check_contain_elements_attribute(self, check_locator, check_value, check_attribute='innerText', attribute_type='', regex: bool = True, check_bool: bool = True, check_count: int = 1, check_operator: bool = '='):
+        """
+        检查目标元素的属性是否满足某个条件
+        :param check_locator: 检查目标的元素或locator
+        :param check_value: 属性值
+        :param check_attribute: 属性名
+        :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+        :param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
+        :param check_bool: 是否为满足attribute的条件，默认为找到满足attribute条件的元素。如果输入False，那么需要找到locator元素中attribute不满足条件的元素
+        :param check_count: 符合上述要求的元素的数量。
+        :param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
+        :return: 判定结果
+        """
+        find_elements = self.selenium_find_elements_with_attribute(
+            find_locator=check_locator, find_value=check_value, find_attribute=check_attribute, attribute_type=attribute_type, regex=regex, check_bool=check_bool)
+        if check_operator in ['=', '==']:
+            re_bool = len(find_elements) == check_count
+        elif check_operator in ['!=', '><', '<>']:
+            re_bool = len(find_elements) != check_count
+        elif check_operator in ['<']:
+            re_bool = len(find_elements) < check_count
+        elif check_operator in ['<=']:
+            re_bool = len(find_elements) <= check_count
+        elif check_operator in ['>']:
+            re_bool = len(find_elements) > check_count
+        elif check_operator in ['>=']:
+            re_bool = len(find_elements) >= check_count
+        else:
+            raise ValueError(f'can not analyse operator:{check_operator}')
+        return re_bool
 
     def selenium_find_elements_with_attribute(self, find_locator, find_value='', find_attribute='innerText', attribute_type='', regex=True, check_bool=True) -> List[WebElement]:
         """
@@ -205,6 +227,175 @@ class SeleniumAction(Basic):
             re_value.append(this_value)
         return re_value
 
+    def selenium_check_contain_element_by_rule(self, rule: Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]):
+        """
+        使用一个规则来当前页面下是否存在某个元素
+        :param rule:
+        List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+            [*]：                  selenium_check_contain_element；             check_locator
+            [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+            [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+            [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+            [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+            [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+            [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+            [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+            [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+            [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+            [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+            [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+        Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+            {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+            {check_value:_}：                selenium_check_contain_element_attribute
+            {check_count:_}：                selenium_check_contain_elements
+            {}：                             selenium_check_contain_element
+        Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+        :return: 是否规则寻找成功
+        """
+        rule = self.analyse_json(rule)
+        find_this = None
+        if isinstance(rule, list):
+            if len(rule) == 1:
+                find_this = self.selenium_check_contain_element(*rule)
+            elif len(rule) == 2:
+                if isinstance(rule[1], bool):
+                    find_this = self.selenium_check_contain_element(*rule)
+                elif isinstance(rule[1], int):
+                    find_this = self.selenium_check_contain_elements(*rule)
+                elif isinstance(rule[1], str):
+                    find_this = self.selenium_check_contain_element_attribute(*rule)
+            elif len(rule) == 3:
+                if isinstance(rule[1], int):
+                    if isinstance(rule[2], str):
+                        find_this = self.selenium_check_contain_elements(*rule)
+                elif isinstance(rule[1], str):
+                    if isinstance(rule[2], bool):
+                        find_this = self.selenium_check_contain_element_attribute(*rule[:2], check_exist=rule[2])
+                    elif isinstance(rule[2], int):
+                        find_this = self.selenium_check_contain_elements_attribute(*rule[:2], check_count=rule[2])
+                    elif isinstance(rule[2], str):
+                        find_this = self.selenium_check_contain_element_attribute(*rule)
+            elif len(rule) == 4:
+                if isinstance(rule[1], str):
+                    if isinstance(rule[2], int):
+                        if isinstance(rule[3], str):
+                            find_this = self.selenium_check_contain_elements_attribute(*rule[:2], check_count=rule[2], check_operator=rule[3])
+                    elif isinstance(rule[2], str):
+                        if isinstance(rule[3], bool):
+                            find_this = self.selenium_check_contain_element_attribute(*rule[:3], check_exist=rule[3])
+                        elif isinstance(rule[3], int):
+                            find_this = self.selenium_check_contain_elements_attribute(*rule[:3], check_count=rule[3])
+            elif len(rule) == 5:
+                if isinstance(rule[1], str) and isinstance(rule[2], str) and isinstance(rule[3], int) and isinstance(rule[4], str):
+                    find_this = self.selenium_check_contain_elements_attribute(*rule[:3], check_count=rule[3], check_operator=rule[4])
+        elif isinstance(rule, dict):
+            if 'check_value' in rule:
+                if 'check_count' in rule:
+                    find_this = self.selenium_check_contain_elements_attribute(**rule)
+                else:
+                    find_this = self.selenium_check_contain_element_attribute(**rule)
+            else:
+                if 'check_count' in rule:
+                    find_this = self.selenium_check_contain_elements(**rule)
+                else:
+                    find_this = self.selenium_check_contain_element(**rule)
+        if find_this is None:
+            raise ValueError(f'can not analyse rule:{rule}')
+        return find_this
+
+    def selenium_check_contain_multiple_elements_together(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
+        """
+        检查多个元素是否同时满足要求
+        :param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+        List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+            [*]：                  selenium_check_contain_element；             check_locator
+            [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+            [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+            [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+            [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+            [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+            [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+            [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+            [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+            [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+            [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+            [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+        Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+            {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+            {check_value:_}：                selenium_check_contain_element_attribute
+            {check_count:_}：                selenium_check_contain_elements
+            {}：                             selenium_check_contain_element
+        Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+        :return:
+        """
+        rule_list = self.analyse_json(rule_list)
+        find_all = True
+        for rule_index, rule in enumerate(rule_list):
+            find_this = self.selenium_check_contain_element_by_rule(rule, _simple_doc=True)
+            print(f'{find_this}! {rule_index + 1}/{len(rule_list)} rule:{rule}')
+            find_all = find_all and find_this
+        return find_all
+
+    def selenium_check_contain_multiple_elements_ever_init(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
+        """
+        检查多个元素是否曾经满足过要求
+        :param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+        :return:
+        """
+        rule_list = self.analyse_json(rule_list)
+        self._check_contain_multiple_elements_ever_value = [False for _ in rule_list]
+        return False
+
+    def selenium_check_contain_multiple_elements_ever_loop(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
+        """
+        检查多个元素是否曾经满足过要求
+        :param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+        List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+            [*]：                  selenium_check_contain_element；             check_locator
+            [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+            [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+            [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+            [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+            [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+            [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+            [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+            [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+            [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+            [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+            [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+        Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+            {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+            {check_value:_}：                selenium_check_contain_element_attribute
+            {check_count:_}：                selenium_check_contain_elements
+            {}：                             selenium_check_contain_element
+        Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+        :return:
+        """
+        rule_list = self.analyse_json(rule_list)
+        if self._check_contain_multiple_elements_ever_value is None or len(self._check_contain_multiple_elements_ever_value) != len(rule_list):
+            self._check_contain_multiple_elements_ever_value = [False for _ in rule_list]
+        for rule_index, rule in enumerate(rule_list):
+            if self._check_contain_multiple_elements_ever_value[rule_index] is False:
+                find_this = self.selenium_check_contain_element_by_rule(rule, _simple_doc=True)
+                print(f'{find_this}! {rule_index + 1}/{len(rule_list)} rule:{rule}')
+                self._check_contain_multiple_elements_ever_value[rule_index] = find_this
+        find_all = all(self._check_contain_multiple_elements_ever_value)
+        for _i, _j in zip(rule_list, self._check_contain_multiple_elements_ever_value):
+            print(_j, _i)
+        return find_all
+
     def selenium_new_screenshot_folder(self):
         screen_path = self.get_robot_variable("Screenshot_path")
         if screen_path:
@@ -238,18 +429,33 @@ class SeleniumAction(Basic):
         return find_elements_bool == check_exist
 
     @robot_log_keyword(False)
-    def selenium_check_contain_elements(self, check_locator, check_count: int = 1) -> bool:
+    def selenium_check_contain_elements(self, check_locator, check_count: int = 1, check_operator='=') -> bool:
         """
         检查页面内某些元素的总数是否为特定的值
         :param check_locator: 目标元素或locator
         :param check_count: 元素的数量
+        :param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
         :return: 搜索结果。只有正好数量相同才会返回True
         """
         check_count = int(check_count)
         find_elements = self.selenium_analyse_elements(check_locator)
         find_elements_num = len(find_elements)
-        print(f'we find {find_elements_num}→{check_count} {check_locator}')
-        return find_elements_num == check_count
+        if check_operator in ['=', '==']:
+            re_bool = find_elements_num == check_count
+        elif check_operator in ['!=', '><', '<>']:
+            re_bool = find_elements_num != check_count
+        elif check_operator in ['<']:
+            re_bool = find_elements_num < check_count
+        elif check_operator in ['<=']:
+            re_bool = find_elements_num <= check_count
+        elif check_operator in ['>']:
+            re_bool = find_elements_num > check_count
+        elif check_operator in ['>=']:
+            re_bool = find_elements_num >= check_count
+        else:
+            raise ValueError(f'can not analyse operator:{check_operator}')
+        print(f'{re_bool}! {find_elements_num}{check_operator}{check_count} {check_locator}')
+        return re_bool
 
     @robot_log_keyword(False)
     def selenium_html_check_contain_element(self, check_locator, check_exist: bool = True) -> bool:
@@ -424,6 +630,22 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_click_until_find_element_attribute(self):
         """
         点击第一个元素，直到在第二组目标元素中存在一个元素的属性值满足需求，才停止点击
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_multiple_elements_together)
+    def selenium_wait_until_find_multiple_elements_together(self):
+        """
+        一直等待，直到所有目标元素均同时出现
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_multiple_elements_ever_loop, init_check_function=SeleniumAction.selenium_check_contain_multiple_elements_ever_init)
+    def selenium_wait_until_find_multiple_elements_ever(self):
+        """
+        一直等待，直到所有目标元素均曾经出现过
         ******************** 下方是辅助函数和参数，请忽略return参数 ********************
         """
         pass

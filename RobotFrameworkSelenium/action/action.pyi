@@ -18,51 +18,60 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		super().__init__()
 		self._check_element_attribute_change_value: typing.Union[str, None] =  None
 		self._check_element_count_value: typing.Union[int, None] =  None
-	def selenium_take_full_screenshot(self, screenshot_name = 'python-screenshot.png', _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+		self._check_contain_multiple_elements_ever_value: typing.Union[List[bool], None] =  None
+	def selenium_take_full_screenshot(self, screenshot_name = 'python-screenshot.png', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
 		"""
 		全窗口截屏，并保存文件
 		:param screenshot_name: 截图名曾
 		:return: (截图名称,截图路径) or cv全图片信息
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_click_element(self, click_locator, operate = 'click', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_click_element(self, click_locator, operate = 'click', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		点击某个元素，可以双击
 		:param click_locator:点击元素的位置，可以使用locator或者Element
 		:param operate: 默认为点击，输入 doubleclick 可以双击
 		:return:
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_get_element_color_list(self, screenshot_locator = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> numpy.ndarray:
+	def selenium_get_element_color_list(self, screenshot_locator = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> numpy.ndarray:
 		"""
 		获得目标元素的颜色列表
 		:param screenshot_locator: 目标元素或其locator。
 		:return: 一个x*y*3的ndarray
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_click_element_with_offset(self, click_locator, x = 0, y = 0, operate = 'click', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_click_element_with_offset(self, click_locator, x = 0, y = 0, operate = 'click', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		选择某个元素相对中心偏移一定距离的位置进行点击
 		:param click_locator: 目标元素或者locator
 		:param x: 横坐标像素数
 		:param y: 纵坐标像素数
-        :param operate: 默认点击，double_click为双击，right_click为右键点击
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
 		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_element_attribute(self, check_locator, check_value, check_attribute = 'innerText', attribute_type = '', regex: bool = True, check_bool: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+	def selenium_check_contain_element_attribute(self, check_locator, check_value, check_attribute = 'innerText', attribute_type = '', regex: bool = True, check_bool: bool = True, check_exist: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
 		"""
 		检查目标元素的属性是否满足某个条件
 		:param check_locator: 检查目标的元素或locator
@@ -70,14 +79,36 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		:param check_attribute: 属性名
 		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
 		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
-		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
+		:param check_bool: 是否为满足attribute的条件，默认为找到满足attribute条件的元素。如果输入False，那么需要找到locator元素中attribute不满足条件的元素
+		:param check_exist: 按照以上条件来看，是否应当至少存在一个这样 的元素。如果输入False，俺么需要一个都没有
 		:return: 判定结果
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_find_elements_with_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.List[selenium.webdriver.remote.webelement.WebElement]:
+	def selenium_check_contain_elements_attribute(self, check_locator, check_value, check_attribute = 'innerText', attribute_type = '', regex: bool = True, check_bool: bool = True, check_count: int = 1, check_operator: bool = '=', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		检查目标元素的属性是否满足某个条件
+		:param check_locator: 检查目标的元素或locator
+		:param check_value: 属性值
+		:param check_attribute: 属性名
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
+		:param check_bool: 是否为满足attribute的条件，默认为找到满足attribute条件的元素。如果输入False，那么需要找到locator元素中attribute不满足条件的元素
+		:param check_count: 符合上述要求的元素的数量。
+		:param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
+		:return: 判定结果
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
+	def selenium_find_elements_with_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> typing.List[selenium.webdriver.remote.webelement.WebElement]:
 		"""
 		在所有目标元素中，寻找所有属性值满足需求的元素，并返回
 		:param find_locator: 搜索目标元素或locator
@@ -87,12 +118,14 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
 		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
 		:return:
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_find_element_with_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> selenium.webdriver.remote.webelement.WebElement:
+	def selenium_find_element_with_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> selenium.webdriver.remote.webelement.WebElement:
 		"""
 		在所有目标元素中，寻找第一个属性值满足需求的元素，并返回
 		:param find_locator: 搜索目标元素或locator
@@ -103,451 +136,869 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
 		:return: 寻找到的满足要求的元素
 		:raise RfError:如果没有满足要求的元素，那么会抛出
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_get_element_attribute(self, target_locator, target_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.Any:
+	def selenium_get_element_attribute(self, target_locator, target_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> typing.Any:
 		"""
 		获取目标元素的属性的值
 		:param target_locator: 目标元素或locator
 		:param target_attribute: 属性名称
 		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
 		:return:
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_get_elements_attribute(self, target_locator, target_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> typing.Any:
+	def selenium_get_elements_attribute(self, target_locator, target_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> typing.List[typing.Any]:
 		"""
-        获取所有目标元素的属性的值
-        :param target_locator: 目标元素或locator
-        :param target_attribute: 属性名称
-        :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-        :return: 所有目标元素的该属性的值组合成的列表
+		获取所有目标元素的属性的值
+		:param target_locator: 目标元素或locator
+		:param target_attribute: 属性名称
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:return: 所有目标元素的该属性的值组合成的列表
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
+	def selenium_check_contain_element_by_rule(self, rule: typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		使用一个规则来当前页面下是否存在某个元素
+		:param rule:
+		List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		    [*]：                  selenium_check_contain_element；             check_locator
+		    [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		    [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		    [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		    [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		    [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		    [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		    [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		    [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		    [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		    [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		    [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		    {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		    {check_value:_}：                selenium_check_contain_element_attribute
+		    {check_count:_}：                selenium_check_contain_elements
+		    {}：                             selenium_check_contain_element
+		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		:return: 是否规则寻找成功
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
+	def selenium_check_contain_multiple_elements_together(self, rule_list: typing.List[typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		检查多个元素是否同时满足要求
+		:param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		    [*]：                  selenium_check_contain_element；             check_locator
+		    [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		    [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		    [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		    [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		    [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		    [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		    [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		    [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		    [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		    [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		    [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		    {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		    {check_value:_}：                selenium_check_contain_element_attribute
+		    {check_count:_}：                selenium_check_contain_elements
+		    {}：                             selenium_check_contain_element
+		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		:return:
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_new_screenshot_folder(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+	def selenium_check_contain_multiple_elements_ever_init(self, rule_list: typing.List[typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
 		"""
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		检查多个元素是否曾经满足过要求
+		:param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_delete_elements(self, delete_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> None:
+	def selenium_check_contain_multiple_elements_ever_loop(self, rule_list: typing.List[typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		检查多个元素是否曾经满足过要求
+		:param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		    [*]：                  selenium_check_contain_element；             check_locator
+		    [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		    [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		    [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		    [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		    [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		    [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		    [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		    [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		    [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		    [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		    [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		    {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		    {check_value:_}：                selenium_check_contain_element_attribute
+		    {check_count:_}：                selenium_check_contain_elements
+		    {}：                             selenium_check_contain_element
+		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
+	def selenium_new_screenshot_folder(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
+	def selenium_delete_elements(self, delete_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> None:
 		"""
 		在页面上把某个/些元素删除掉
 		:param delete_locator: 待删除的元素或locator
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_contain_element(self, check_locator, check_exist: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_contain_element(self, check_locator, check_exist: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		检查页面内是否存在某个元素
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
 		:return: 搜素结果
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-
-	def selenium_check_contain_elements(self, check_locator, check_count: int = 1, _return_when_error=None, _log_keyword_structure=True, _return_name=None) -> bool:
+	def selenium_check_contain_elements(self, check_locator, check_count: int = 1, check_operator = '=', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		检查页面内某些元素的总数是否为特定的值
 		:param check_locator: 目标元素或locator
 		:param check_count: 元素的数量
+		:param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
 		:return: 搜索结果。只有正好数量相同才会返回True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_html_check_contain_element(self, check_locator, check_exist: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_html_check_contain_element(self, check_locator, check_exist: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		使用html方式检查页面内是否存在某个元素
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
 		:return: 搜素结果
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-
-	def selenium_html_check_contain_elements(self, check_locator, check_count: int = 1, _return_when_error=None, _log_keyword_structure=True, _return_name=None) -> bool:
+	def selenium_html_check_contain_elements(self, check_locator, check_count: int = 1, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		使用html方式检查页面内某些元素的总数是否为特定的值
 		:param check_locator: 目标元素或locator
 		:param check_count: 元素的数量
 		:return: 搜索结果。只有正好数量相同才会返回True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-
-	def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type='', _return_when_error=None, _log_keyword_structure=True, _return_name=None) -> bool:
+	def selenium_check_element_attribute_change_init(self, check_locator, check_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_element_attribute_change_loop(self, check_locator, check_attribute = 'innerText', attribute_type = '', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		:param check_locator: 待检查的元素或locator
 		:param check_attribute: 检查的目标属性名
 		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_element_count_change_init(self, check_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_element_count_change_init(self, check_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_element_count_change_loop(self, check_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_element_count_change_loop(self, check_locator, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		:param check_locator: 待检查的元素或locator
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute = 'innerText', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute = 'innerText', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute = 'innerText', _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def selenium_check_stable_element_attribute_unchanged_loop(self, check_locator, check_attribute = 'innerText', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
 		:param check_locator: 待检查的元素或locator
 		:param check_attribute: 检查的目标属性名
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
-	def always_true(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None) -> bool:
+	def always_true(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False) -> bool:
 		"""
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
 	...
 
 class SeleniumActionUntil(SeleniumAction):
-	def selenium_click_until_available(self, click_locator, x = 0, y = 0, operate = 'click', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_click_until_available(self, click_locator, x = 0, y = 0, operate = 'click', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直尝试点击某个元素，直至这个元素可以被点击并且成功被点击为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param click_locator: 目标元素或者locator
 		:param x: 横坐标像素数
 		:param y: 纵坐标像素数
 		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: True
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在页面上寻找到某个元素为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:return: 搜素结果
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_find_elements(self, check_locator, check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_find_elements(self, check_locator, check_count: int = 1, check_operator = '=', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在页面上寻找到某些元素达到某个数量为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		检查页面内某些元素的总数是否为特定的值
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param check_locator: 目标元素或locator
 		:param check_count: 元素的数量
+		:param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
+		:return: 搜索结果。只有正好数量相同才会返回True
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_html_wait_until_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_html_wait_until_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在页面上寻找到某个元素为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:return: 搜素结果
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_html_wait_until_find_elements(self, check_locator, check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_html_wait_until_find_elements(self, check_locator, check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在页面上寻找到某些元素达到某个数量为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		检查页面内某些元素的总数是否为特定的值
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param check_locator: 目标元素或locator
 		:param check_count: 元素的数量
+		:return: 搜索结果。只有正好数量相同才会返回True
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_not_find_element(self, check_locator, check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_not_find_element(self, check_locator, check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
-		:param check_exist: 现在默认值为False
+		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 目标元素或locator
+		:return: 搜素结果
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_find_elements(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_count: int = 1, check_operator = '=', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		点击第一个元素，直到寻找到一定数量的第二个元素才停止点击。
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
 		
-		一直等待，直到在页面上寻找到某个元素为止
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: 搜索结果。只有正好数量相同才会返回True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 目标元素或locator
+		:param check_count: 元素的数量
+		:param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		点击第一个元素，直到寻找到第二个元素才停止点击
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
 		
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: 搜素结果
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 目标元素或locator
+		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_not_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: 搜素结果
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 目标元素或locator
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_find_element_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
+		"""
+		一直等待，直到第二组目标元素存在一个元素的属性值满足需求
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param find_locator: 搜索目标元素或locator
+		:param find_value: 所需要匹配的属性值
+		:param find_attribute: 所需要寻找的属性
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
+		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
+		:return: 寻找到的满足要求的元素
+		:raise RfError:如果没有满足要求的元素，那么会抛出
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_find_element_attribute(self, click_locator, find_locator, x = 0, y = 0, operate = 'click', find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
+		"""
+		点击第一个元素，直到在第二组目标元素中存在一个元素的属性值满足需求，才停止点击
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: 寻找到的满足要求的元素
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param find_locator: 搜索目标元素或locator
+		:param find_value: 所需要匹配的属性值
+		:param find_attribute: 所需要寻找的属性
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
+		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
+		:raise RfError:如果没有满足要求的元素，那么会抛出
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_find_multiple_elements_together(self, rule_list: typing.List[typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]], timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None):
+		"""
+		一直等待，直到所有目标元素均同时出现
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		    [*]：                  selenium_check_contain_element；             check_locator
+		    [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		    [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		    [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		    [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		    [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		    [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		    [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		    [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		    [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		    [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		    [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		    {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		    {check_value:_}：                selenium_check_contain_element_attribute
+		    {check_count:_}：                selenium_check_contain_elements
+		    {}：                             selenium_check_contain_element
+		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		:return:
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_find_multiple_elements_ever(self, rule_list: typing.List[typing.Union[typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]], timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None):
+		"""
+		一直等待，直到所有目标元素均曾经出现过
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		    [*]：                  selenium_check_contain_element；             check_locator
+		    [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		    [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		    [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		    [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		    [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		    [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		    [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		    [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		    [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		    [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		    [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		    {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		    {check_value:_}：                selenium_check_contain_element_attribute
+		    {check_count:_}：                selenium_check_contain_elements
+		    {}：                             selenium_check_contain_element
+		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		:return:
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_attribute_change(self, check_locator, check_attribute = 'innerText', attribute_type = '', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直等待，直到目标元素的某个目标属性发生了变化
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 待检查的元素或locator
+		:param check_attribute: 检查的目标属性名
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_attribute_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_attribute = 'innerText', attribute_type = '', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直点击第一个元素，直到第二组目标元素的某个目标属性发生了变化
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 待检查的元素或locator
+		:param check_attribute: 检查的目标属性名
+		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_element_count_change(self, check_locator, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直等待，直到目标元素的数量发生了变化
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 待检查的元素或locator
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_element_count_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直点击第一个元素，直到第二组目标元素的数量发生了变化
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return: True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param check_locator: 待检查的元素或locator
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_stable_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
+		"""
+		一直等待，直到在界面上连续若干秒都能搜索到目标元素
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
 		检查页面内是否存在某个元素
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:return: 搜素结果
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param timeout:限时。只有在这个时长范围内一直通过，才算成功.
+		:param init_check:是否进行初始检查，如果为True，那j么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
+		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_click_until_find_elements(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		点击第一个元素，直到寻找到一定数量的第二个元素才停止点击。
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 目标元素或locator
-		:param check_count: 元素的数量
-		"""
-		...
-	def selenium_click_until_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		点击第一个元素，直到寻找到第二个元素才停止点击
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 目标元素或locator
-		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
-		"""
-		...
-	def selenium_click_until_not_find_element(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		:param check_exist: 现在默认值为False
-		
-		点击第一个元素，直到寻找到第二个元素才停止点击
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 目标元素或locator
-		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
-		"""
-		...
-	def selenium_wait_until_find_element_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
-		"""
-		一直等待，直到第二组目标元素存在一个元素的属性值满足需求
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param find_locator: 搜索目标元素或locator
-		:param find_value: 所需要匹配的属性值
-		:param find_attribute: 所需要寻找的属性
-		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
-		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
-		"""
-		...
-	def selenium_click_until_find_element_attribute(self, click_locator, find_locator, x = 0, y = 0, operate = 'click', find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
-		"""
-		点击第一个元素，直到在第二组目标元素中存在一个元素的属性值满足需求，才停止点击
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param find_locator: 搜索目标元素或locator
-		:param find_value: 所需要匹配的属性值
-		:param find_attribute: 所需要寻找的属性
-		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
-		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
-		"""
-		...
-	def selenium_wait_until_attribute_change(self, check_locator, check_attribute = 'innerText', attribute_type = '', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		一直等待，直到目标元素的某个目标属性发生了变化
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 待检查的元素或locator
-		:param check_attribute: 检查的目标属性名
-		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-		"""
-		...
-	def selenium_click_until_attribute_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', check_attribute = 'innerText', attribute_type = '', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		一直点击第一个元素，直到第二组目标元素的某个目标属性发生了变化
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 待检查的元素或locator
-		:param check_attribute: 检查的目标属性名
-		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
-		"""
-		...
-	def selenium_wait_until_element_count_change(self, check_locator, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		一直等待，直到目标元素的数量发生了变化
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 待检查的元素或locator
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		"""
-		...
-	def selenium_click_until_element_count_change(self, click_locator, check_locator, x = 0, y = 0, operate = 'click', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		一直点击第一个元素，直到第二组目标元素的数量发生了变化
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		
-		选择某个元素相对中心偏移一定距离的位置进行点击
-		:param click_locator: 目标元素或者locator
-		:param x: 横坐标像素数
-		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
-		:return: True
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
-		:param check_locator: 待检查的元素或locator
-		"""
-		...
-	def selenium_wait_until_stable_find_element(self, check_locator, check_exist: bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
-		"""
-		一直等待，直到在界面上连续若干秒都能搜索到目标元素
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		:param check_locator: 目标元素或locator
-		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
-		"""
-		...
-	def selenium_wait_until_stable_find_elements(self, check_locator, check_count: int = 1, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_stable_find_elements(self, check_locator, check_count: int = 1, check_operator = '=', timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在界面上连续若干秒都能搜索到一定数量的目标元素
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		检查页面内某些元素的总数是否为特定的值
 		:param check_locator: 目标元素或locator
 		:param check_count: 元素的数量
+		:param check_operator: 检查数量时，使用的符号，支持=,==,!=,><,<>,>,>=,<,<=，实际找到的元素数量在左，check_count在右
+		:return: 搜索结果。只有正好数量相同才会返回True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param timeout:限时。只有在这个时长范围内一直通过，才算成功.
+		:param init_check:是否进行初始检查，如果为True，那j么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
+		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_stable_not_find_element(self, check_locator, check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_stable_not_find_element(self, check_locator, check_exist: bool = False, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
-		:param check_exist: 现在默认值为False
-		
-		一直等待，直到在界面上连续若干秒都能搜索到目标元素
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
-		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:param check_locator: 目标元素或locator
+		:return: 搜素结果
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param timeout:限时。只有在这个时长范围内一直通过，才算成功.
+		:param init_check:是否进行初始检查，如果为True，那j么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
+		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_stable_find_element_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
+	def selenium_wait_until_stable_find_element_attribute(self, find_locator, find_value = '', find_attribute = 'innerText', attribute_type = '', regex = True, check_bool = True, timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> selenium.webdriver.remote.webelement.WebElement:
 		"""
 		一直等待，直到在界面上连续若干秒都在目标元素内找到一个属性满足要求的元素
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		在所有目标元素中，寻找第一个属性值满足需求的元素，并返回
 		:param find_locator: 搜索目标元素或locator
 		:param find_value: 所需要匹配的属性值
 		:param find_attribute: 所需要寻找的属性
 		:param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
 		:param regex: 属性值是否为一个正则公式，默认为正则，如果输入False，那么需要属性值完全匹配
-		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件
+		:param check_bool: 是否为满足条件，默认为找到满足条件的元素。如果输入False，那么需要找到目标元素存在一个不满足条件的
+		:return: 寻找到的满足要求的元素
+		:raise RfError:如果没有满足要求的元素，那么会抛出
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param timeout:限时。只有在这个时长范围内一直通过，才算成功.
+		:param init_check:是否进行初始检查，如果为True，那j么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
+		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_wait_until_stable_attribute_unchanged(self, check_locator, check_attribute = 'innerText', timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, __debug_default = None, __debug_debug = None) -> bool:
+	def selenium_wait_until_stable_attribute_unchanged(self, check_locator, check_attribute = 'innerText', timeout = 30.0, init_check = True, init_sleep = 0.0, stable_time = 3.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None) -> bool:
 		"""
 		一直等待，直到在界面上连续若干秒内目标元素的目标属性的属性值均未发生变化
-		******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
 		:param check_locator: 待检查的元素或locator
 		:param check_attribute: 检查的目标属性名
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param timeout:限时。只有在这个时长范围内一直通过，才算成功.
+		:param init_check:是否进行初始检查，如果为True，那j么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
+		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
-	def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time = 1.0, pass_when_same_input = True, __debug_default = None, __debug_debug = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None):
+	def selenium_input_delete_all_and_input(self, input_locator, input_text, sleep_time = 1.0, pass_when_same_input = True, __debug_default = None, __debug_debug = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
 		"""
 		对input输入框删除所有内容后重新输入内容。
-		如果输入完毕后，发现文本没有变为理想结果，将会尝试重试，重试最多5此
-		输入成功，或者达成最多重试次数后，会点击Tab进行失焦
+		        如果输入完毕后，发现文本没有变为理想结果，将会尝试重试，重试最多5此
+		        输入成功，或者达成最多重试次数后，会点击Tab进行失焦
 		:param input_locator: input输入框或其locator
 		:param input_text: 待输入的文本
 		:param sleep_time: 输入完毕后等待时间
 		:param pass_when_same_input: 默认如果已有信息和目标文本一致，那么将会跳过这些操作。如果传入False，那么将总是重新输入
-		:param _return_when_error : 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
-		:param _log_keyword_structure : bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
-		:param _return_name : str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
 	...
