@@ -194,10 +194,12 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {check_count:_}：                selenium_check_contain_elements
 		    {}：                             selenium_check_contain_element
 		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:self,function:str,args:[],kwargs:{}} self.function
+		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:return: 是否规则寻找成功
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -229,10 +231,12 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {check_count:_}：                selenium_check_contain_elements
 		    {}：                             selenium_check_contain_element
 		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:self,function:str,args:[],kwargs:{}} self.function
+		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:return:
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -276,10 +280,12 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {check_count:_}：                selenium_check_contain_elements
 		    {}：                             selenium_check_contain_element
 		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:self,function:str,args:[],kwargs:{}} self.function
+		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:return:
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -725,10 +731,12 @@ class SeleniumActionUntil(SeleniumAction):
 		    {check_count:_}：                selenium_check_contain_elements
 		    {}：                             selenium_check_contain_element
 		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:self,function:str,args:[],kwargs:{}} self.function
+		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:return:
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
@@ -768,10 +776,12 @@ class SeleniumActionUntil(SeleniumAction):
 		    {check_count:_}：                selenium_check_contain_elements
 		    {}：                             selenium_check_contain_element
 		Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-		    {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-		    {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-		    {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-		    {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		    {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		    {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		    {link:self,function:str,args:[],kwargs:{}} self.function
+		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:return:
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束

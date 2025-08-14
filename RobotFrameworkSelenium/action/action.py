@@ -250,10 +250,12 @@ class SeleniumAction(Basic):
             {check_count:_}：                selenium_check_contain_elements
             {}：                             selenium_check_contain_element
         Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:self,function:str,args:[],kwargs:{}} self.function
+            {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
         :return: 是否规则寻找成功
         """
         rule = self.analyse_json(rule)
@@ -293,7 +295,29 @@ class SeleniumAction(Basic):
                 if isinstance(rule[1], str) and isinstance(rule[2], str) and isinstance(rule[3], int) and isinstance(rule[4], str):
                     find_this = self.selenium_check_contain_elements_attribute(*rule[:3], check_count=rule[3], check_operator=rule[4])
         elif isinstance(rule, dict):
-            if 'check_value' in rule:
+            if 'link' in rule:
+                args = rule.get('args', rule.get('arg', []))
+                kwargs = rule.get('kwargs', rule.get('kwarg', {}))
+                should_check = rule.get('should_check', False)
+                check_value = rule.get('check_value', True)
+                if rule['link'] == 'element':
+                    func = self.selenium_check_contain_element
+                elif rule['link'] == 'elements':
+                    func = self.selenium_check_contain_elements
+                elif rule['link'] in ['element_attribute', 'element_attri', 'element_attr']:
+                    func = self.selenium_check_contain_element_attribute
+                elif rule['link'] in ['elements_attribute', 'elements_attri', 'elements_attr']:
+                    func = self.selenium_check_contain_elements_attribute
+                elif rule['link'] == 'self':
+                    func = getattr(self, rule['function'])
+                else:
+                    func = rule['link']
+                re_value = func(*args, **kwargs)
+                if should_check:
+                    find_this = re_value == check_value
+                else:
+                    find_this = True
+            elif 'check_value' in rule:
                 if 'check_count' in rule:
                     find_this = self.selenium_check_contain_elements_attribute(**rule)
                 else:
@@ -330,10 +354,12 @@ class SeleniumAction(Basic):
             {check_count:_}：                selenium_check_contain_elements
             {}：                             selenium_check_contain_element
         Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:self,function:str,args:[],kwargs:{}} self.function
+            {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
         :return:
         """
         rule_list = self.analyse_json(rule_list)
@@ -377,10 +403,12 @@ class SeleniumAction(Basic):
             {check_count:_}：                selenium_check_contain_elements
             {}：                             selenium_check_contain_element
         Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
-            {func:element,args:[],kwargs:{}}            selenium_check_contain_element
-            {func:elements,args:[],kwargs:{}}           selenium_check_contain_elements
-            {func:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
-            {func:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+            {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+            {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+            {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+            {link:self,function:str,args:[],kwargs:{}} self.function
+            {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
         :return:
         """
         rule_list = self.analyse_json(rule_list)
