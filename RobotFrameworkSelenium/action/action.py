@@ -227,6 +227,7 @@ class SeleniumAction(Basic):
             re_value.append(this_value)
         return re_value
 
+    @robot_log_keyword(False)
     def selenium_check_contain_element_by_rule(self, rule: Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]):
         """
         使用一个规则来当前页面下是否存在某个元素
@@ -331,6 +332,7 @@ class SeleniumAction(Basic):
             raise ValueError(f'can not analyse rule:{rule}')
         return find_this
 
+    @robot_log_keyword(False)
     def selenium_check_contain_multiple_elements_together(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
         """
         检查多个元素是否同时满足要求
@@ -370,6 +372,7 @@ class SeleniumAction(Basic):
             find_all = find_all and find_this
         return find_all
 
+    @robot_log_keyword(False)
     def selenium_check_contain_multiple_elements_ever_init(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
         """
         检查多个元素是否曾经满足过要求
@@ -380,6 +383,7 @@ class SeleniumAction(Basic):
         self._check_contain_multiple_elements_ever_value = [False for _ in rule_list]
         return False
 
+    @robot_log_keyword(False)
     def selenium_check_contain_multiple_elements_ever_loop(self, rule_list: List[Union[List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]):
         """
         检查多个元素是否曾经满足过要求
@@ -423,6 +427,58 @@ class SeleniumAction(Basic):
         for _i, _j in zip(rule_list, self._check_contain_multiple_elements_ever_value):
             print(_j, _i)
         return find_all
+
+    @robot_log_keyword(False)
+    def selenium_check_contain_one_of_elements(self, return_rule_list: List[List[Union[Any, List[Union[str, int, bool]], Dict[str, Union[str, int, bool, list, dict]]]]]):
+        """
+        在众多的判定条件中，只需要有一个满足条件，就可以返回这个条件所满足的
+        :param return_rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+        注意：本list仅接受长度为2的list作为元素，否则会报错
+        注意：规则存在优先级，如果上一个规则通过，且返回的值转为bool后为True，那么将不会执行下一个规则，直接返回对应值。否则会执行下一个规则
+        [0]
+            判定成功后的返回值。如果这里填入的是None、False、0、""之类转换为bool为False的值，那么轮到这条指令执行后，不会影响后续检查指令的执行和最后的结果
+        [1]
+            List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+                [*]：                  selenium_check_contain_element；             check_locator
+                [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+                [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+                [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+                [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+                [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+                [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+                [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+                [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+                [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+                [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+                [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+            Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+                {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+                {check_value:_}：                selenium_check_contain_element_attribute
+                {check_count:_}：                selenium_check_contain_elements
+                {}：                             selenium_check_contain_element
+            Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+                {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+                {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+                {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+                {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+                {link:self,function:str,args:[],kwargs:{}} self.function
+                {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+        :return:
+        """
+        return_rule_list = self.analyse_json(return_rule_list)
+        re_value = False
+        for this_real_return, this_rule in return_rule_list:
+            try:
+                this_re_value = self.selenium_check_contain_element_by_rule(this_rule)
+                if this_re_value:
+                    re_value = this_real_return
+                    if re_value:
+                        break
+                else:
+                    continue
+            except:
+                continue
+        return re_value
 
     def selenium_new_screenshot_folder(self):
         screen_path = self.get_robot_variable("Screenshot_path")
@@ -635,6 +691,22 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_click_until_find_element(self):
         """
         点击第一个元素，直到寻找到第二个元素才停止点击
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_one_of_elements)
+    def selenium_wait_until_find_one_of_elements(self):
+        """
+        等待直到按照某个规则，寻找到其中一个元素
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_one_of_elements)
+    def selenium_click_until_find_one_of_elements(self):
+        """
+        点击第一个元素，直到按照某个规则，寻找到其中一个元素
         ******************** 下方是辅助函数和参数，请忽略return参数 ********************
         """
         pass

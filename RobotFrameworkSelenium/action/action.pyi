@@ -294,6 +294,48 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		"""
 		...
+	def selenium_check_contain_one_of_elements(self, return_rule_list: typing.List[typing.List[typing.Union[typing.Any, typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]]], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
+		"""
+		在众多的判定条件中，只需要有一个满足条件，就可以返回这个条件所满足的
+		:param return_rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		注意：本list仅接受长度为2的list作为元素，否则会报错
+		注意：规则存在优先级，如果上一个规则通过，且返回的值转为bool后为True，那么将不会执行下一个规则，直接返回对应值。否则会执行下一个规则
+		[0]
+		    判定成功后的返回值。如果这里填入的是None、False、0、""之类转换为bool为False的值，那么轮到这条指令执行后，不会影响后续检查指令的执行和最后的结果
+		[1]
+		    List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		        [*]：                  selenium_check_contain_element；             check_locator
+		        [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		        [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		        [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		        [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		        [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		        [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		        [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		        [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		        [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		        [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		        [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		    Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		        {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		        {check_value:_}：                selenium_check_contain_element_attribute
+		        {check_count:_}：                selenium_check_contain_elements
+		        {}：                             selenium_check_contain_element
+		    Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		        {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		        {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		        {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		        {link:self,function:str,args:[],kwargs:{}} self.function
+		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		"""
+		...
 	def selenium_new_screenshot_folder(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False):
 		"""
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
@@ -612,6 +654,112 @@ class SeleniumActionUntil(SeleniumAction):
 		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
 		:param check_locator: 目标元素或locator
 		:param check_exist: 默认检查存在。改为False后，改为检查页面中是否不存在这个元素
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_find_one_of_elements(self, return_rule_list: typing.List[typing.List[typing.Union[typing.Any, typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]]], timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None):
+		"""
+		等待直到按照某个规则，寻找到其中一个元素
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param return_rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		注意：本list仅接受长度为2的list作为元素，否则会报错
+		注意：规则存在优先级，如果上一个规则通过，且返回的值转为bool后为True，那么将不会执行下一个规则，直接返回对应值。否则会执行下一个规则
+		[0]
+		    判定成功后的返回值。如果这里填入的是None、False、0、""之类转换为bool为False的值，那么轮到这条指令执行后，不会影响后续检查指令的执行和最后的结果
+		[1]
+		    List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		        [*]：                  selenium_check_contain_element；             check_locator
+		        [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		        [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		        [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		        [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		        [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		        [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		        [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		        [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		        [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		        [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		        [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		    Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		        {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		        {check_value:_}：                selenium_check_contain_element_attribute
+		        {check_count:_}：                selenium_check_contain_elements
+		        {}：                             selenium_check_contain_element
+		    Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		        {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		        {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		        {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		        {link:self,function:str,args:[],kwargs:{}} self.function
+		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		:return:
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_find_one_of_elements(self, click_locator, return_rule_list: typing.List[typing.List[typing.Union[typing.Any, typing.List[typing.Union[str, int, bool]], typing.Dict[str, typing.Union[str, int, bool, list, dict]]]]], x = 0, y = 0, operate = 'click', timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, __debug_default = None, __debug_debug = None):
+		"""
+		点击第一个元素，直到按照某个规则，寻找到其中一个元素
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param return_rule_list: 列表，列表内可以以以下形式书写，用于进行寻找：
+		注意：本list仅接受长度为2的list作为元素，否则会报错
+		注意：规则存在优先级，如果上一个规则通过，且返回的值转为bool后为True，那么将不会执行下一个规则，直接返回对应值。否则会执行下一个规则
+		[0]
+		    判定成功后的返回值。如果这里填入的是None、False、0、""之类转换为bool为False的值，那么轮到这条指令执行后，不会影响后续检查指令的执行和最后的结果
+		[1]
+		    List：（如果类型如下所示，那么将按照对应的函数，和对应的参数填入，不接受其他的组合情况）
+		        [*]：                  selenium_check_contain_element；             check_locator
+		        [*,bool]：             selenium_check_contain_element：             check_locator | check_exist
+		        [*,int]：              selenium_check_contain_elements：            check_locator | check_count
+		        [*,str]：              selenium_check_contain_element_attribute：   check_locator | check_value
+		        [*,int,str]：          selenium_check_contain_elements：            check_locator | check_count | check_operation
+		        [*,str,bool]：         selenium_check_contain_element_attribute：   check_locator | check_value | check_exist
+		        [*,str,int]：          selenium_check_contain_elements_attribute：  check_locator | check_value | check_count
+		        [*,str,str]：          selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute
+		        [*,str,int,str]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_count     | check_operation
+		        [*,str,str,bool]：     selenium_check_contain_element_attribute：   check_locator | check_value | check_attribute | check_exist
+		        [*,str,str,int]：      selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count
+		        [*,str,str,int,str]：  selenium_check_contain_elements_attribute：  check_locator | check_value | check_attribute | check_count     | check_operation
+		    Dict（如果包含某个key，就按照对应的函数，以**kwargs的规则进行填入）
+		        {check_value:_,check_count:_}：  selenium_check_contain_elements_attribute
+		        {check_value:_}：                selenium_check_contain_element_attribute
+		        {check_count:_}：                selenium_check_contain_elements
+		        {}：                             selenium_check_contain_element
+		    Dict（如果包含 func，那么会按照args和kwargs的规则进行填入）
+		        {link:element,args:[],kwargs:{}}            selenium_check_contain_element
+		        {link:elements,args:[],kwargs:{}}           selenium_check_contain_elements
+		        {link:element_attribute,args:[],kwargs:{}}  selenium_check_contain_element_attribute
+		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
+		        {link:self,function:str,args:[],kwargs:{}} self.function
+		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
 		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
