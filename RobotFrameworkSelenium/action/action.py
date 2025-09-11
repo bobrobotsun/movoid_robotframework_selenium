@@ -95,7 +95,7 @@ class SeleniumAction(Basic):
         """
         find_elements = self.selenium_find_elements_with_attribute(
             find_locator=check_locator, find_value=check_value, find_attribute=check_attribute, attribute_type=attribute_type, regex=regex, check_bool=check_bool)
-        return bool(check_exist) != bool(len(find_elements) >= 1)
+        return bool(check_exist) == bool(len(find_elements) >= 1)
 
     @robot_log_keyword(False)
     def selenium_check_contain_elements_attribute(self, check_locator, check_value, check_attribute='innerText', attribute_type='', regex: bool = True, check_bool: bool = True, check_count: int = 1, check_operator: bool = '='):
