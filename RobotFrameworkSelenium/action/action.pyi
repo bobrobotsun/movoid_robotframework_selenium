@@ -200,6 +200,8 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		    {link:self,function:str,args:[],kwargs:{}} self.function
 		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		    should_check :False :是否需要做成功判断
+		    check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return: 是否规则寻找成功
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -237,6 +239,8 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		    {link:self,function:str,args:[],kwargs:{}} self.function
 		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		    should_check :False :是否需要做成功判断
+		    check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -286,6 +290,8 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		    {link:self,function:str,args:[],kwargs:{}} self.function
 		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		    should_check :False :是否需要做成功判断
+		    check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -328,6 +334,8 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		        {link:self,function:str,args:[],kwargs:{}} self.function
 		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		        should_check :False :是否需要做成功判断
+		        check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -703,6 +711,8 @@ class SeleniumActionUntil(SeleniumAction):
 		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		        {link:self,function:str,args:[],kwargs:{}} self.function
 		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		        should_check :False :是否需要做成功判断
+		        check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
@@ -760,6 +770,8 @@ class SeleniumActionUntil(SeleniumAction):
 		        {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		        {link:self,function:str,args:[],kwargs:{}} self.function
 		        {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		        should_check :False :是否需要做成功判断
+		        check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
 		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
@@ -885,6 +897,8 @@ class SeleniumActionUntil(SeleniumAction):
 		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		    {link:self,function:str,args:[],kwargs:{}} self.function
 		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		    should_check :False :是否需要做成功判断
+		    check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
@@ -930,6 +944,8 @@ class SeleniumActionUntil(SeleniumAction):
 		    {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
 		    {link:self,function:str,args:[],kwargs:{}} self.function
 		    {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+		    should_check :False :是否需要做成功判断
+		    check_value  :True  :做判断时，result应当是什么值，才是PASS
 		:return:
 		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
 		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束

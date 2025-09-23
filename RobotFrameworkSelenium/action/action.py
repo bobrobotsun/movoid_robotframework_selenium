@@ -17,7 +17,7 @@ import cv2
 import numpy as np
 from RobotFrameworkBasic import robot_log_keyword, do_until_check, RfError, wait_until_stable
 from movoid_debug import debug
-from movoid_function import reset_function_default_value, decorate_class_function_exclude
+from movoid_function import reset_function_default_value, decorate_class_function_exclude, adapt_call
 from selenium.webdriver import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -257,49 +257,87 @@ class SeleniumAction(Basic):
             {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
             {link:self,function:str,args:[],kwargs:{}} self.function
             {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+            should_check :False :是否需要做成功判断
+            check_value  :True  :做判断时，result应当是什么值，才是PASS
         :return: 是否规则寻找成功
         """
         rule = self.analyse_json(rule)
         find_this = None
+        func = None
+        func_args = ()
+        func_kwargs = {}
+        should_check = True
+        check_value = True
         if isinstance(rule, list):
             if len(rule) == 1:
-                find_this = self.selenium_check_contain_element(*rule)
+                func = self.selenium_check_contain_element
+                func_args = rule
             elif len(rule) == 2:
                 if isinstance(rule[1], bool):
-                    find_this = self.selenium_check_contain_element(*rule)
+                    func = self.selenium_check_contain_element
+                    func_args = rule
                 elif isinstance(rule[1], int):
-                    find_this = self.selenium_check_contain_elements(*rule)
+                    func = self.selenium_check_contain_elements
+                    func_args = rule
                 elif isinstance(rule[1], str):
-                    find_this = self.selenium_check_contain_element_attribute(*rule)
+                    func = self.selenium_check_contain_element_attribute
+                    func_args = rule
             elif len(rule) == 3:
                 if isinstance(rule[1], int):
                     if isinstance(rule[2], str):
-                        find_this = self.selenium_check_contain_elements(*rule)
+                        func = self.selenium_check_contain_elements
+                        func_args = rule
                 elif isinstance(rule[1], str):
                     if isinstance(rule[2], bool):
-                        find_this = self.selenium_check_contain_element_attribute(*rule[:2], check_exist=rule[2])
+                        func = self.selenium_check_contain_element_attribute
+                        func_args = rule[:2]
+                        func_kwargs = {
+                            'check_exist': rule[2],
+                        }
                     elif isinstance(rule[2], int):
-                        find_this = self.selenium_check_contain_elements_attribute(*rule[:2], check_count=rule[2])
+                        func = self.selenium_check_contain_elements_attribute
+                        func_args = rule[:2]
+                        func_kwargs = {
+                            'check_count': rule[2],
+                        }
                     elif isinstance(rule[2], str):
-                        find_this = self.selenium_check_contain_element_attribute(*rule)
+                        func = self.selenium_check_contain_element_attribute
+                        func_args = rule
             elif len(rule) == 4:
                 if isinstance(rule[1], str):
                     if isinstance(rule[2], int):
                         if isinstance(rule[3], str):
-                            find_this = self.selenium_check_contain_elements_attribute(*rule[:2], check_count=rule[2], check_operator=rule[3])
+                            func = self.selenium_check_contain_elements_attribute
+                            func_args = rule[:2]
+                            func_kwargs = {
+                                'check_count': rule[2],
+                                'check_operator': rule[3],
+                            }
                     elif isinstance(rule[2], str):
                         if isinstance(rule[3], bool):
-                            find_this = self.selenium_check_contain_element_attribute(*rule[:3], check_exist=rule[3])
+                            func = self.selenium_check_contain_element_attribute
+                            func_args = rule[:3]
+                            func_kwargs = {
+                                'check_exist': rule[3],
+                            }
                         elif isinstance(rule[3], int):
-                            find_this = self.selenium_check_contain_elements_attribute(*rule[:3], check_count=rule[3])
+                            func = self.selenium_check_contain_elements_attribute
+                            func_args = rule[:3]
+                            func_kwargs = {
+                                'check_count': rule[3],
+                            }
             elif len(rule) == 5:
                 if isinstance(rule[1], str) and isinstance(rule[2], str) and isinstance(rule[3], int) and isinstance(rule[4], str):
-                    find_this = self.selenium_check_contain_elements_attribute(*rule[:3], check_count=rule[3], check_operator=rule[4])
+                    func = self.selenium_check_contain_elements_attribute
+                    func_args = rule[:3]
+                    func_kwargs = {
+                        'check_count': rule[3],
+                        'check_operator': rule[4],
+                    }
         elif isinstance(rule, dict):
             if 'link' in rule:
-                args = rule.get('args', rule.get('arg', []))
-                kwargs = rule.get('kwargs', rule.get('kwarg', {}))
-                should_check = rule.get('should_check', False)
+                func_args = rule.get('args', rule.get('arg', []))
+                func_kwargs = rule.get('kwargs', rule.get('kwarg', {}))
                 check_value = rule.get('check_value', True)
                 if rule['link'] == 'element':
                     func = self.selenium_check_contain_element
@@ -313,23 +351,38 @@ class SeleniumAction(Basic):
                     func = getattr(self, rule['function'])
                 else:
                     func = rule['link']
-                re_value = func(*args, **kwargs)
-                if should_check:
-                    find_this = re_value == check_value
-                else:
-                    find_this = True
+                default_should_check = func in (
+                    self.selenium_check_contain_element,
+                    self.selenium_check_contain_elements,
+                    self.selenium_check_contain_element_attribute,
+                    self.selenium_check_contain_elements_attribute,
+                )
+                should_check = rule.get('should_check', default_should_check)
             elif 'check_value' in rule:
                 if 'check_count' in rule:
-                    find_this = self.selenium_check_contain_elements_attribute(**rule)
+                    func = self.selenium_check_contain_elements_attribute
+                    func_kwargs = rule
                 else:
-                    find_this = self.selenium_check_contain_element_attribute(**rule)
+                    func = self.selenium_check_contain_element_attribute
+                    func_kwargs = rule
             else:
                 if 'check_count' in rule:
-                    find_this = self.selenium_check_contain_elements(**rule)
+                    func = self.selenium_check_contain_elements
+                    func_kwargs = rule
                 else:
-                    find_this = self.selenium_check_contain_element(**rule)
-        if find_this is None:
+                    func = self.selenium_check_contain_element
+                    func_kwargs = rule
+        if func is None:
             raise ValueError(f'can not analyse rule:{rule}')
+        else:
+            func_kwargs['_simple_doc'] = True
+            re_value = adapt_call(func, func_args, func_kwargs)
+            if should_check:
+                find_this = re_value == check_value
+                print(f'{find_this}!>{re_value}< == >{check_value}<')
+            else:
+                find_this = True
+                print(f'do not check return value:{re_value} and return True')
         return find_this
 
     @robot_log_keyword(False)
@@ -362,6 +415,8 @@ class SeleniumAction(Basic):
             {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
             {link:self,function:str,args:[],kwargs:{}} self.function
             {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+            should_check :False :是否需要做成功判断
+            check_value  :True  :做判断时，result应当是什么值，才是PASS
         :return:
         """
         rule_list = self.analyse_json(rule_list)
@@ -413,6 +468,8 @@ class SeleniumAction(Basic):
             {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
             {link:self,function:str,args:[],kwargs:{}} self.function
             {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+            should_check :False :是否需要做成功判断
+            check_value  :True  :做判断时，result应当是什么值，才是PASS
         :return:
         """
         rule_list = self.analyse_json(rule_list)
@@ -463,13 +520,15 @@ class SeleniumAction(Basic):
                 {link:elements_attribute,args:[],kwargs:{}} selenium_check_contain_elements_attribute
                 {link:self,function:str,args:[],kwargs:{}} self.function
                 {link:*,args:[],kwargs:{}} 直接把传入的函数进行调用
+                should_check :False :是否需要做成功判断
+                check_value  :True  :做判断时，result应当是什么值，才是PASS
         :return:
         """
         return_rule_list = self.analyse_json(return_rule_list)
         re_value = False
         for this_real_return, this_rule in return_rule_list:
             try:
-                this_re_value = self.selenium_check_contain_element_by_rule(this_rule)
+                this_re_value = self.selenium_check_contain_element_by_rule(this_rule, _simple_doc=True)
                 if this_re_value:
                     re_value = this_real_return
                     if re_value:
