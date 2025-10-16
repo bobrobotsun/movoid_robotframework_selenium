@@ -24,6 +24,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from ..common import BasicCommon as Basic
 
 
+@decorate_class_function_exclude(debug)
 @decorate_class_function_exclude(robot_log_keyword)
 class SeleniumAction(Basic):
     def __init__(self):
@@ -629,6 +630,11 @@ class SeleniumAction(Basic):
 
     @robot_log_keyword(False)
     def selenium_check_element_attribute_change_init(self, check_locator, check_attribute='innerText', attribute_type='') -> bool:
+        """
+        :param check_locator: 待检查的元素或locator
+        :param check_attribute: 检查的目标属性名
+        :param attribute_type: 属性的类型，默认三个类型均搜索，可以输入以下其中之一：attribute、property、dom
+        """
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = self.selenium_get_element_attribute(tar_element, check_attribute, attribute_type)
         print(f'we find {check_attribute} of {check_locator} is {self._check_element_attribute_change_value}')
@@ -649,6 +655,9 @@ class SeleniumAction(Basic):
 
     @robot_log_keyword(False)
     def selenium_check_element_count_change_init(self, check_locator) -> bool:
+        """
+        :param check_locator: 待检查的元素或locator
+        """
         self._check_element_count_value = len(self.selenium_analyse_elements(check_locator))
         print(f'we find {check_locator} count of {self._check_element_count_value}')
         return False
@@ -665,6 +674,10 @@ class SeleniumAction(Basic):
 
     @robot_log_keyword(False)
     def selenium_check_stable_element_attribute_unchanged_init(self, check_locator, check_attribute='innerText') -> bool:
+        """
+        :param check_locator: 待检测的元素
+        :param check_attribute: 待检测的元素属性
+        """
         tar_element = self.selenium_analyse_element(check_locator)
         self._check_element_attribute_change_value = tar_element.get_attribute(check_attribute)
         return False
@@ -687,8 +700,8 @@ class SeleniumAction(Basic):
         return True
 
 
-@decorate_class_function_exclude(robot_log_keyword)
 @decorate_class_function_exclude(debug, param=True, kwargs={'teardown_function': SeleniumAction.selenium_debug_teardown})
+@decorate_class_function_exclude(robot_log_keyword)
 class SeleniumActionUntil(SeleniumAction):
 
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_click_element_with_offset)

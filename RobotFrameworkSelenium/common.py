@@ -19,12 +19,14 @@ import selenium.webdriver.chrome.webdriver
 from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword, RUN
 from Selenium2Library import Selenium2Library
 from lxml import html
+from movoid_debug import debug, no_debug
 from movoid_function import decorate_class_function_exclude
 from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from selenium import webdriver
 
 
+@decorate_class_function_exclude(debug)
 @decorate_class_function_exclude(robot_log_keyword)
 class BasicCommon(RobotBasic):
     def __init__(self):
@@ -303,8 +305,20 @@ class BasicCommon(RobotBasic):
         else:
             return locator
 
+    @no_debug
     @robot_no_log_keyword
     def selenium_debug_teardown(self, function, args, kwargs, re_value, error, trace_back, has_return):
+        """
+        通用的debug teardown函数
+        :param function: 函数
+        :param args: args参数
+        :param kwargs: kwargs参数
+        :param re_value: 对应的返回值
+        :param error: 弹出的报错，没报错就None
+        :param trace_back: 弹出的报错的traceback，没报错就None
+        :param has_return: 是否有返回值
+        :return:
+        """
         if error:
             if self._no_error_when_exception <= 0:
                 self.error(self.get_suite_case_str(), function.__name__, args, kwargs, type(error).__name__, error)
