@@ -17,7 +17,7 @@ import numpy as np
 import robot.libraries.BuiltIn
 import selenium.webdriver.chrome.webdriver
 from RobotFrameworkBasic import RobotBasic, robot_log_keyword, RfError, robot_no_log_keyword, RUN
-from Selenium2Library import Selenium2Library
+from SeleniumLibrary import SeleniumLibrary
 from lxml import html
 from movoid_debug import debug, no_debug
 from movoid_function import decorate_class_function_exclude
@@ -32,7 +32,7 @@ class BasicCommon(RobotBasic):
     def __init__(self):
         super().__init__()
         self.built: robot.libraries.BuiltIn.BuiltIn = getattr(self, 'built', None)
-        self.selenium_lib: Selenium2Library = getattr(self, 'selenium_lib', None)
+        self.selenium_lib: SeleniumLibrary = getattr(self, 'selenium_lib', None)
         self.driver: selenium.webdriver.chrome.webdriver.WebDriver = getattr(self, 'driver', None)
         self.action_chains: ActionChains = getattr(self, 'action_chains', None)
         self.screenshot_root: str = getattr(self, 'screenshot_root', None)
@@ -47,6 +47,10 @@ class BasicCommon(RobotBasic):
             :param screenshot_dir: screenshot存储路径
             """
             self.screenshot_root = screenshot_dir if screenshot_dir else None
+            self.selenium_lib=SeleniumLibrary()
+            if not screenshot_dir:
+                self.selenium_lib.set_screenshot_directory("EMBED")
+
 
         def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
             """
@@ -55,6 +59,7 @@ class BasicCommon(RobotBasic):
             """
             self.driver = getattr(webdriver, driver_name)(**kwargs)
             self.action_chains = ActionChains(self.driver)
+            self.selenium_lib.register_driver(self.driver, 'driver')
 
         def selenium_close_webdriver(self):
             self.driver.close()
