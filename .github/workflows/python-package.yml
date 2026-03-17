@@ -19,6 +19,9 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14" ]
+        rf-version:
+          - { install : "==6.1.1" , file : "6" }
+          - { install : ">=7" , file : "7" }
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -41,6 +44,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8 pytest pytest-html
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install robotframework${{ matrix.rf-version.install}}
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
@@ -53,5 +57,5 @@ jobs:
       - name: show html report
         uses: actions/upload-artifact@v4
         with:
-          name: report_${{ matrix.python-version }}.html
+          name: report_${{ matrix.python-version }}_${{ matrix.rf-version.file }}.html
           path: report.html
