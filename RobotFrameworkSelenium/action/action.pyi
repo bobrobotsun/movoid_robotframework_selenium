@@ -71,7 +71,7 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		:param click_locator: 目标元素或者locator
 		:param x: 横坐标像素数
 		:param y: 纵坐标像素数
-		:param operate: 默认点击，double_click为双击，right_click为右键点击
+		:param operate: 默认点击，double_click为双击，right_click为右键点击，[move,1,2]为点击后拖动
 		:return: True
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容

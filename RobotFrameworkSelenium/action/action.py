@@ -67,7 +67,7 @@ class SeleniumAction(Basic):
         :param click_locator: 目标元素或者locator
         :param x: 横坐标像素数
         :param y: 纵坐标像素数
-        :param operate: 默认点击，double_click为双击，right_click为右键点击
+        :param operate: 默认点击，double_click为双击，right_click为右键点击，[move,1,2]为点击后拖动
         :return: True
         """
         tar_element = self.selenium_analyse_element(click_locator)
@@ -78,6 +78,10 @@ class SeleniumAction(Basic):
             self.action_chains.double_click()
         elif operate in ('right', 'rightclick', 'right_click', 'right click'):
             self.action_chains.context_click()
+        elif isinstance(operate, (list, tuple, set)):
+            if len(operate) >= 3 and operate[0] in ('move', 'drop'):
+                offset_x, offset_y = operate[1:3]
+                self.action_chains.drag_and_drop_by_offset(tar_element, offset_x, offset_y)
         self.action_chains.perform()
         return True
 
