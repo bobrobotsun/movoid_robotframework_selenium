@@ -47,10 +47,9 @@ class BasicCommon(RobotBasic):
             :param screenshot_dir: screenshot存储路径
             """
             self.screenshot_root = screenshot_dir if screenshot_dir else None
-            self.selenium_lib=SeleniumLibrary()
+            self.selenium_lib = SeleniumLibrary()
             if not screenshot_dir:
                 self.selenium_lib.set_screenshot_directory("EMBED")
-
 
         def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
             """
@@ -78,31 +77,34 @@ class BasicCommon(RobotBasic):
         def selenium_close_webdriver(self):
             self.selenium_lib.close_all_browsers()
 
-    def selenium_analyse_locator(self, locator: str) -> Tuple[str, str]:
+    def selenium_analyse_locator(self, locator: Union[str, list, set, tuple]) -> Tuple[str, str]:
         """
         将locator文本解析为by,path，方便find element
         :param locator: 合并的locator
         :return:
         """
-        if locator.startswith('/'):
-            return 'xpath', locator
-        elif '=' in locator:
-            by, path = locator.split('=', 1)
-            by = by.lower().replace('_', ' ').strip(' ')
-            if by in ["id", "xpath", "link text", "partial link text", "name", "tag name", "class name", "css selector"]:
-                return by, path
-            elif by in ('css',):
-                return "css selector", locator
-            elif by in ('link',):
-                return "partial link text", locator
-            elif by in ('tag',):
-                return "tag name", locator
-            elif by in ('class',):
-                return "class name", locator
+        if isinstance(locator, str):
+            if locator.startswith('/'):
+                return 'xpath', locator
+            elif '=' in locator:
+                by, path = locator.split('=', 1)
+                by = by.lower().replace('_', ' ').strip(' ')
+                if by in ["id", "xpath", "link text", "partial link text", "name", "tag name", "class name", "css selector"]:
+                    return by, path
+                elif by in ('css',):
+                    return "css selector", locator
+                elif by in ('link',):
+                    return "partial link text", locator
+                elif by in ('tag',):
+                    return "tag name", locator
+                elif by in ('class',):
+                    return "class name", locator
+                else:
+                    return "css selector", locator
             else:
                 return "css selector", locator
         else:
-            return "css selector", locator
+            return locator[0], locator[1]
 
     def selenium_find_elements_by_locator(self, locator) -> List[WebElement]:
         """

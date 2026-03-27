@@ -74,7 +74,7 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
 		"""
 		...
-	def selenium_analyse_locator(self, locator: str, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None) -> typing.Tuple[str, str]:
+	def selenium_analyse_locator(self, locator: typing.Union[str, list, set, tuple], _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None) -> typing.Tuple[str, str]:
 		"""
 		将locator文本解析为by,path，方便find element
 		:param locator: 合并的locator
