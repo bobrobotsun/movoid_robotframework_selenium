@@ -818,10 +818,26 @@ class SeleniumActionUntil(SeleniumAction):
         """
         pass
 
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_multiple_elements_together)
+    def selenium_click_until_find_multiple_elements_together(self):
+        """
+        一直点击，直到所有目标元素均同时出现
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
     @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_contain_multiple_elements_ever_loop, init_check_function=SeleniumAction.selenium_check_contain_multiple_elements_ever_init)
     def selenium_wait_until_find_multiple_elements_ever(self):
         """
         一直等待，直到所有目标元素均曾经出现过
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_contain_multiple_elements_ever_loop, init_check_function=SeleniumAction.selenium_check_contain_multiple_elements_ever_init)
+    def selenium_click_until_find_multiple_elements_ever(self):
+        """
+        一直点击，直到所有目标元素均曾经出现过
         ******************** 下方是辅助函数和参数，请忽略return参数 ********************
         """
         pass
