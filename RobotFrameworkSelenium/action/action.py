@@ -11,7 +11,7 @@ import os
 import pathlib
 import re
 import time
-from typing import List, Union, Any, Dict
+from typing import List, Union, Any, Dict, Optional
 
 import cv2
 import numpy as np
@@ -32,6 +32,7 @@ class SeleniumAction(Basic):
         self._check_element_attribute_change_value: Union[str, None] = None
         self._check_element_count_value: Union[int, None] = None
         self._check_contain_multiple_elements_ever_value: Union[List[bool], None] = None
+        self._check_window_count: Optional[int] = None
 
     def selenium_take_full_screenshot(self, screenshot_name='python-screenshot.png'):
         """
@@ -700,6 +701,33 @@ class SeleniumAction(Basic):
         print(f'we find {check_attribute} of {check_locator} is {temp_value}{"==" if re_bool else "!="}{self._check_element_attribute_change_value}')
         return re_bool
 
+    @robot_log_keyword(False)
+    def selenium_check_window_add_init(self, new_window_alias=None):
+        self._check_window_count = len(self.driver.window_handles)
+        return False
+
+    @robot_log_keyword(False)
+    def selenium_check_window_add_loop(self, new_window_alias=None):
+        current_window_count = len(self.driver.window_handles)
+        re_bool = current_window_count >= self._check_window_count
+        print(f'now window has {current_window_count} {">" if re_bool else "<="} {self._check_window_count}')
+        if re_bool:
+            self.selenium_check_window_handles()
+            if new_window_alias is not None:
+                self.selenium_set_index_window_by_alias(new_window_alias, -1)
+        return re_bool
+
+    @robot_log_keyword(False)
+    def selenium_check_window_title_exist(self, window_title, new_window_alias=None):
+        window_titles = [*self.selenium_get_all_window_title().values()]
+        re_bool = window_title in window_titles
+        print(f'now window has {"" if re_bool else "not "}{window_title}.all titles:{window_titles}')
+        if re_bool:
+            self.selenium_check_window_handles()
+            if new_window_alias is not None:
+                self.selenium_set_index_window_by_alias(new_window_alias, -1)
+        return re_bool
+
     def always_true(self) -> bool:
         return True
 
@@ -909,6 +937,38 @@ class SeleniumActionUntil(SeleniumAction):
     def selenium_wait_until_stable_attribute_unchanged(self):
         """
         一直等待，直到在界面上连续若干秒内目标元素的目标属性的属性值均未发生变化
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_window_add_loop, init_check_function=SeleniumAction.selenium_check_window_add_init)
+    def selenium_wait_until_window_add(self):
+        """
+        一直等待，直到window的数量增加
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_window_add_loop, init_check_function=SeleniumAction.selenium_check_window_add_init)
+    def selenium_click_until_window_add(self):
+        """
+        一直等待，直到window的数量增加
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.always_true, SeleniumAction.selenium_check_window_title_exist)
+    def selenium_wait_until_window_title_exist(self):
+        """
+        一直等待，直到window的数量增加
+        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+        """
+        pass
+
+    @do_until_check(SeleniumAction.selenium_click_element_with_offset, SeleniumAction.selenium_check_window_title_exist)
+    def selenium_click_until_window_title_exist(self):
+        """
+        一直等待，直到window的数量增加
         ******************** 下方是辅助函数和参数，请忽略return参数 ********************
         """
         pass

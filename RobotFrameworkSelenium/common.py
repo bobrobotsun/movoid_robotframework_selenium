@@ -10,7 +10,8 @@ import base64
 import inspect
 import math
 import os
-from typing import List, Tuple, Union, Any, Callable
+import typing
+from typing import List, Tuple, Union, Any, Callable, Optional, Dict
 
 import cv2
 import numpy as np
@@ -21,7 +22,7 @@ from SeleniumLibrary import SeleniumLibrary
 from lxml import html
 from movoid_debug import debug, no_debug
 from movoid_function import decorate_class_function_exclude
-from selenium.webdriver import ActionChains
+from selenium.common import NoSuchWindowException, InvalidSessionIdException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium import webdriver
 
@@ -33,13 +34,34 @@ class BasicCommon(RobotBasic):
         super().__init__()
         self.built: robot.libraries.BuiltIn.BuiltIn = getattr(self, 'built', None)
         self.selenium_lib: SeleniumLibrary = getattr(self, 'selenium_lib', None)
-        self.driver: selenium.webdriver.chrome.webdriver.WebDriver = getattr(self, 'driver', None)
-        self.action_chains: ActionChains = getattr(self, 'action_chains', None)
+        self._driver_dict: typing.Dict[str, selenium.webdriver.chrome.webdriver.WebDriver] = getattr(self, '_driver_dict', {})
+        self._driver_key: Optional[str] = getattr(self, '_driver_key', None)
         self.screenshot_root: str = getattr(self, 'screenshot_root', None)
         self.outer_coordinate: Tuple[float] = getattr(self, 'outer_coordinate', None)
         self.inner_coordinate: Tuple[float] = getattr(self, 'inner_coordinate', None)
         self.window_x: float = getattr(self, 'window_x', None)
         self.window_y: float = getattr(self, 'window_y', None)
+
+    @property
+    def driver(self) -> selenium.webdriver.chrome.webdriver.WebDriver:
+        if self._driver_key is not None and self._driver_key in self._driver_dict:
+            return self._driver_dict[self._driver_key]['driver']
+        else:
+            return None
+
+    @property
+    def action_chains(self) -> selenium.webdriver.ActionChains:
+        if self._driver_key is not None and self._driver_key in self._driver_dict:
+            return self._driver_dict[self._driver_key]['action_chains']
+        else:
+            return None
+
+    @property
+    def _driver_dict_value(self) -> dict:
+        if self._driver_key is not None and self._driver_key in self._driver_dict:
+            return self._driver_dict[self._driver_key]
+        else:
+            return {}
 
     if RUN == 'python':
         def selenium_init(self, screenshot_dir: str = '.'):
@@ -51,17 +73,7 @@ class BasicCommon(RobotBasic):
             if not screenshot_dir:
                 self.selenium_lib.set_screenshot_directory("EMBED")
 
-        def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
-            """
-            :param driver_name: Chrome,Ie,Edge,Firefox,Safari,WebKitGTK,WPEWebKit
-            :param kwargs: 其他driver参数
-            """
-            self.driver = getattr(webdriver, driver_name)(**kwargs)
-            self.action_chains = ActionChains(self.driver)
-            self.selenium_lib.register_driver(self.driver, 'driver')
 
-        def selenium_close_webdriver(self):
-            self.driver.close()
     else:
         def selenium_init(self, screenshot_dir: str = '.'):
             self.selenium_lib = self.built.get_library_instance('Selenium2Library')
@@ -69,13 +81,228 @@ class BasicCommon(RobotBasic):
             if not screenshot_dir:
                 self.selenium_lib.set_screenshot_directory("EMBED")
 
-        def selenium_create_webdriver(self, driver_name: str = 'Chrome', **kwargs):
-            self.selenium_lib.create_webdriver(driver_name=driver_name, **kwargs)
-            self.driver = self.selenium_lib.driver
-            self.action_chains = ActionChains(self.driver)
+    def _create_driver_alias(self, alias=None) -> Tuple[bool, str]:
+        """
+        根据alias确实是否已经生成，如果不输入，那么将会自动生成一个没有过的值
+        :param alias:
+        :return: bool,str 是否已经生成了，目标alias名。
+        """
+        if alias is None:
+            i = 0
+            while True:
+                temp = f'_{i}'
+                if temp not in self._driver_dict and temp not in self.selenium_lib._drivers._aliases:
+                    return False, temp
+                i += 1
+        else:
+            temp = str(alias)
+            return temp in self._driver_dict or temp in self.selenium_lib._drivers._aliases, temp
 
-        def selenium_close_webdriver(self):
-            self.selenium_lib.close_all_browsers()
+    def selenium_create_webdriver(self, driver_name: str = 'Chrome', alias=None, **kwargs):
+        """
+        :param driver_name: Chrome,Ie,Edge,Firefox,Safari,WebKitGTK,WPEWebKit
+        :param alias: 标记名称，如果不填写的话，会默认按照_0、_1的逻辑无限循环增加下去
+        :param kwargs: 其他driver参数
+        """
+        alias_exist, new_alias = self._create_driver_alias(alias=alias)
+        if alias_exist:
+            raise KeyError(f'can not create same alias:{new_alias}')
+        else:
+            driver_dict = {'driver': getattr(webdriver, driver_name)(**kwargs)}
+            self._driver_dict[new_alias] = driver_dict
+            self._driver_key = new_alias
+            self.selenium_lib.register_driver(self.driver, new_alias)
+            driver_dict['action_chains'] = selenium.webdriver.ActionChains(self.driver)
+            driver_dict['window_list'] = []  # 这里是已经注册过的window handle的列表
+            driver_dict['window_alias'] = {}  # 这里是用户确认的别名，alias:window_handle
+            self.selenium_check_window_handles()
+            return new_alias
+
+    def _close_webdriver_by_key(self, key):
+        """把目标driver整个quit掉"""
+        key = str(key)
+        if key in self._driver_dict:
+            if self._driver_dict[key]['window_list']:
+                if self._driver_key == key:
+                    if len(self._driver_dict) <= 1:
+                        self._driver_key = None
+                    else:
+                        driver_keys = list(self._driver_dict.keys())
+                        driver_key_index = driver_keys.index(key)
+                        if driver_key_index == 0:
+                            self._driver_key = driver_keys[1]
+                        else:
+                            self._driver_key = driver_keys[driver_key_index - 1]
+            self._driver_dict[key]['driver'].quit()
+            self._driver_dict.pop(key)
+            if key in self.selenium_lib._drivers._aliases:
+                del self.selenium_lib._drivers._aliases[key]
+
+    def _close_window_by_key(self, key):
+        key = str(key)
+        if key in self._driver_dict:
+            self._driver_dict[key]['driver'].close()
+            self.selenium_check_window_handles(key)
+
+    def selenium_switch_to_driver_by_alias(self, alias: str, error_when_not_find: bool = True):
+        """
+        将当前的driver切换到alias对应的driver
+        :param alias:
+        :param error_when_not_find:
+        :return:
+        """
+        alias = str(alias)
+        if alias in self._driver_dict:
+            self._driver_key = alias
+            self.selenium_lib._drivers.switch(self.driver)
+            return True
+        else:
+            if error_when_not_find:
+                raise KeyError(f'can not find alias:{alias}')
+            else:
+                return False
+
+    def selenium_close_webdriver(self, alias=None, close_all_windows: bool = True):
+        """
+        删除
+        :param alias:
+        :param close_all_windows:会尝试关闭所有的窗口
+        :return:
+        """
+        target_driver = self._driver_key if alias is None else str(alias)
+        if target_driver in self._driver_dict:
+            if close_all_windows:
+                self._close_webdriver_by_key(target_driver)
+            else:
+                self._close_window_by_key(target_driver)
+
+    def selenium_check_window_handles(self, alias=None, quit_driver: bool = True):
+        """检查当前的windows handle是不是匹配。如果不匹配那么进行增删。仅处理当前的webdriver"""
+        alias = self._driver_key if alias is None else str(alias)
+        if alias in self._driver_dict:
+            try:
+                now_windows = self._driver_dict[alias]['driver'].window_handles
+            except InvalidSessionIdException:
+                self.selenium_close_webdriver(alias, close_all_windows=True)
+            else:
+                past_windows = [*self._driver_dict[alias]['window_list']]
+                if now_windows != past_windows:
+                    self._driver_dict[alias]['window_list'] = now_windows
+                    should_delete = []
+                    for name, window in self._driver_dict[alias]['window_alias']:
+                        if window not in now_windows:
+                            should_delete.append(name)
+                    for name in should_delete:
+                        self._driver_dict[alias]['window_alias'].pop(name)
+                try:
+                    handle = self._driver_dict[alias]['driver'].current_window_handle
+                except NoSuchWindowException:
+                    if len(self._driver_dict[alias]['window_list']) >= 1:
+                        self._driver_dict[alias]['driver'].switch_to.window(self._driver_dict[alias]['window_list'][0])
+                    else:
+                        if quit_driver:
+                            self.selenium_close_webdriver(alias, close_all_windows=True)
+
+    def selenium_set_current_window_by_alias(self, window_alias):
+        """
+        给当前的window设置别名
+        :param window_alias:
+        :return:
+        """
+        self.selenium_check_window_handles()
+        window_alias = str(window_alias)
+        window = self.driver.current_window_handle
+        self._driver_dict_value['window_alias'][window_alias] = window
+
+    def selenium_set_index_window_by_alias(self, window_alias, window_index=-1):
+        """
+        给目标index的window设置别名，一般是设置最后一个
+        :param window_alias:
+        :param window_index:
+        :return:
+        """
+        self.selenium_check_window_handles()
+        window_alias = str(window_alias)
+        window = self._driver_dict_value['window_list'][window_index]
+        self._driver_dict_value['window_alias'][window_alias] = window
+
+    def selenium_switch_to_window_by_index(self, window_index: int):
+        window_index = int(window_index)
+        self.driver.switch_to.window(self._driver_dict_value['window_list'][window_index])
+        return True
+
+    def selenium_switch_to_window_by_alias(self, window_alias: str, error_when_not_find: bool = True):
+        """
+        按照别名将window切换过去
+        :param window_alias:
+        :param error_when_not_find: 如果没有找到，那么是否报错
+        :return:
+        """
+        self.selenium_check_window_handles()
+        window_alias = str(window_alias)
+        if window_alias in self._driver_dict_value['window_alias']:
+            self.driver.switch_to.window(self._driver_dict_value['window_alias'][window_alias])
+            return True
+        else:
+            if error_when_not_find:
+                raise KeyError(f'there is no window alias:{window_alias}')
+            else:
+                return False
+
+    def selenium_switch_to_window_by_handle(self, window_handle: str, error_when_not_find: bool = True):
+        """
+        根据handle来切换
+        :param window_handle:
+        :param error_when_not_find: 如果没有找到，那么是否报错
+        :return:
+        """
+        self.selenium_check_window_handles()
+        window_handle = str(window_handle)
+        if window_handle in self._driver_dict_value['window_list']:
+            self.driver.switch_to.window(window_handle)
+            return True
+        else:
+            if error_when_not_find:
+                raise KeyError(f'there is no window handle:{window_handle}')
+            else:
+                return False
+
+    def selenium_get_window_handle_by_alias(self, window_alias: str):
+        window_alias = str(window_alias)
+        if window_alias in self._driver_dict_value['window_alias']:
+            return self._driver_dict_value['window_alias'][window_alias]
+        else:
+            return None
+
+    def selenium_get_window_handle_by_index(self, index: int):
+        index = int(index)
+        return self._driver_dict_value['window_list'][index]
+
+    def selenium_get_target_window_title_by_handle(self, window_handle: str) -> str:
+        window_handle = str(window_handle)
+        current_handle = self.driver.current_window_handle
+        if current_handle == window_handle:
+            return self.driver.title
+        else:
+            self.selenium_switch_to_window_by_handle(window_handle)
+            title = self.driver.title
+            self.driver.switch_to.window(current_handle)
+            return title
+
+    def selenium_get_all_window_title(self) -> Dict[str, str]:
+        current_handle = self.driver.current_window_handle
+        self.selenium_check_window_handles()
+        re_title = {}
+        for handle in self._driver_dict_value['window_list']:
+            self.driver.switch_to.window(handle)
+            re_title[handle] = self.driver.title
+        self.driver.switch_to.window(current_handle)
+        return re_title
+
+    def selenium_close_window(self):
+        """把current window关了"""
+        self.driver.close()
+        self.selenium_check_window_handles()
 
     def selenium_analyse_locator(self, locator: Union[str, list, set, tuple]) -> Tuple[str, str]:
         """

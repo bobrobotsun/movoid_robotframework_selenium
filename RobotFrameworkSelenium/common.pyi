@@ -6,6 +6,7 @@ import base64
 import inspect
 import math
 import os
+import typing
 import cv2
 import numpy as np
 import robot
@@ -14,22 +15,23 @@ import lxml.html as html
 import selenium.webdriver as webdriver
 import RobotFrameworkBasic
 import robot.libraries.BuiltIn
-import selenium.webdriver.chrome.webdriver
-import typing
+import typing as typing.Dict[str, selenium.webdriver.chrome.webdriver
 import selenium.webdriver.remote.webelement
 import lxml.html
 import numpy
 from SeleniumLibrary import SeleniumLibrary
-from selenium.webdriver.common.action_chains import ActionChains
 
 RUN: str
 class BasicCommon(RobotFrameworkBasic.RobotBasic):
+	driver: property
+	action_chains: property
+	_driver_dict_value: property
 	def __init__(self):
 		super().__init__()
 		self.built: robot.libraries.BuiltIn.BuiltIn =  getattr(self, 'built', None)
 		self.selenium_lib: SeleniumLibrary =  getattr(self, 'selenium_lib', None)
-		self.driver: selenium.webdriver.chrome.webdriver.WebDriver =  getattr(self, 'driver', None)
-		self.action_chains: ActionChains =  getattr(self, 'action_chains', None)
+		self._driver_dict: typing.Dict[str, selenium.webdriver.chrome.webdriver.WebDriver] =  getattr(self, '_driver_dict', {})
+		self._driver_key: typing.Optional[str] =  getattr(self, '_driver_key', None)
 		self.screenshot_root: str =  getattr(self, 'screenshot_root', None)
 		self.outer_coordinate: typing.Tuple[float] =  getattr(self, 'outer_coordinate', None)
 		self.inner_coordinate: typing.Tuple[float] =  getattr(self, 'inner_coordinate', None)
@@ -48,9 +50,25 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
 		"""
 		...
-	def selenium_create_webdriver(self, driver_name: str = 'Chrome', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None, **kwargs):
+	def _create_driver_alias(self, alias = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None) -> typing.Tuple[bool, str]:
+		"""
+		根据alias确实是否已经生成，如果不输入，那么将会自动生成一个没有过的值
+		:param alias:
+		:return: bool,str 是否已经生成了，目标alias名。
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_create_webdriver(self, driver_name: str = 'Chrome', alias = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None, **kwargs):
 		"""
 		:param driver_name: Chrome,Ie,Edge,Firefox,Safari,WebKitGTK,WPEWebKit
+		:param alias: 标记名称，如果不填写的话，会默认按照_0、_1的逻辑无限循环增加下去
 		:param kwargs: 其他driver参数
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
@@ -62,8 +80,202 @@ class BasicCommon(RobotFrameworkBasic.RobotBasic):
 		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
 		"""
 		...
-	def selenium_close_webdriver(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+	def _close_webdriver_by_key(self, key, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
 		"""
+		把目标driver整个quit掉
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def _close_window_by_key(self, key, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_switch_to_driver_by_alias(self, alias: str, error_when_not_find: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		将当前的driver切换到alias对应的driver
+		:param alias:
+		:param error_when_not_find:
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_close_webdriver(self, alias = None, close_all_windows: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		删除
+		:param alias:
+		:param close_all_windows:会尝试关闭所有的窗口
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_check_window_handles(self, alias = None, quit_driver: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		检查当前的windows handle是不是匹配。如果不匹配那么进行增删。仅处理当前的webdriver
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_set_current_window_by_alias(self, window_alias, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		给当前的window设置别名
+		:param window_alias:
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_set_index_window_by_alias(self, window_alias, window_index = -1, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		给目标index的window设置别名，一般是设置最后一个
+		:param window_alias:
+		:param window_index:
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_switch_to_window_by_index(self, window_index: int, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_switch_to_window_by_alias(self, window_alias: str, error_when_not_find: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		按照别名将window切换过去
+		:param window_alias:
+		:param error_when_not_find: 如果没有找到，那么是否报错
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_switch_to_window_by_handle(self, window_handle: str, error_when_not_find: bool = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		根据handle来切换
+		:param window_handle:
+		:param error_when_not_find: 如果没有找到，那么是否报错
+		:return:
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_get_window_handle_by_alias(self, window_alias: str, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_get_window_handle_by_index(self, index: int, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_get_target_window_title_by_handle(self, window_handle: str, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None) -> str:
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_get_all_window_title(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None) -> typing.Dict[str, str]:
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_close_window(self, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		把current window关了
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
 		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容

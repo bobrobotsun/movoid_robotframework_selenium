@@ -21,6 +21,12 @@ Resource          do1.resource
 #    Log    ${_config}[a]
 #    Func1    ${_config}[a]
 
-#02_do2
-#    Log    ${_config}[a]
-#    Func1    ${_config}[a]
+02_windows
+    Selenium Init    
+    Selenium Create Webdriver    
+    Selenium Create Webdriver
+    Sleep    ${1}
+    Selenium Close Window    
+    Sleep    ${1}
+    Selenium Close Window    
+

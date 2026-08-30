@@ -19,6 +19,7 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		self._check_element_attribute_change_value: typing.Union[str, None] =  None
 		self._check_element_count_value: typing.Union[int, None] =  None
 		self._check_contain_multiple_elements_ever_value: typing.Union[typing.List[bool], None] =  None
+		self._check_window_count: typing.Optional[int] =  None
 	def selenium_take_full_screenshot(self, screenshot_name = 'python-screenshot.png', _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
 		"""
 		全窗口截屏，并保存文件
@@ -554,6 +555,42 @@ class SeleniumAction(RobotFrameworkSelenium.common.BasicCommon):
 		"""
 		:param check_locator: 待检查的元素或locator
 		:param check_attribute: 检查的目标属性名
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_check_window_add_init(self, new_window_alias = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_check_window_add_loop(self, new_window_alias = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		"""
+		...
+	def selenium_check_window_title_exist(self, window_title, new_window_alias = None, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
 		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
 		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
 		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
@@ -1430,6 +1467,104 @@ class SeleniumActionUntil(SeleniumAction):
 		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
 		:param stable_time:需要达到的稳定状态的持续时间，只有一直判定正确超过这个时间，才能算过
 		:param check_interval:连续两次检查之间的时间间隔，默认值为0.2，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_window_add(self, new_window_alias = None, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		一直等待，直到window的数量增加
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_window_add(self, click_locator, x = 0, y = 0, operate = 'click', new_window_alias = None, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		一直等待，直到window的数量增加
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击，[move,1,2]为点击后拖动
+		:return: True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_wait_until_window_title_exist(self, window_title, new_window_alias = None, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		一直等待，直到window的数量增加
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
+		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
+		"""
+		...
+	def selenium_click_until_window_title_exist(self, click_locator, window_title, x = 0, y = 0, operate = 'click', new_window_alias = None, timeout = 30.0, init_check = True, init_sleep = 0.0, wait_before_check = 0.0, do_interval = 1.0, check_interval = 0.2, error = True, _return_when_error = None, _log_keyword_structure = True, _return_name = None, _show_return_info = None, _simple_doc = False, _debug_default = None, _debug_debug = None, _force_raise = None):
+		"""
+		一直等待，直到window的数量增加
+		        ******************** 下方是辅助函数和参数，请忽略return参数 ********************
+		
+		选择某个元素相对中心偏移一定距离的位置进行点击
+		:param click_locator: 目标元素或者locator
+		:param x: 横坐标像素数
+		:param y: 纵坐标像素数
+		:param operate: 默认点击，double_click为双击，right_click为右键点击，[move,1,2]为点击后拖动
+		:return: True
+		:param _return_when_error: 输入任意非None值后，当error发生时，不再raise error，而是返回这个值
+		:param _log_keyword_structure: bool : 默认True，生成一组robotframework格式的可展开的日志。如果False时，就不会把这个函数做成折叠状，而是只打印一些内容
+		:param _return_name: str : 你可以把代码中这个函数赋值的变量str写在这儿，来让日志更加贴近python代码内容
+		:param _show_return_info: bool :默认True，是否把return的信息打印出来。
+		:param _simple_doc: bool :默认False，是否仅打印第一行doc信息
+		:param _debug_default:在不唤醒UI时，遇上error的处理逻辑，0/1为上报错误；2为跳过错误；默认1,
+		:param _debug_debug：在会唤醒UI时，遇上error的处理逻辑，0为弹出UI进行处理；1为不弹出UI并向上报错；2为不弹出UI，也不向上报错；默认为0
+		:param _force_raise：设置为True后，可以让它的所有的子函数全部都主动raise error，而不是弹出窗口或跳过错误；默认为False
+		:param timeout:最大时长/超时。检查超过这个时长后，会认为操作失败.
+		:param init_check:是否进行初始检查，如果为True，那么会在操作前进行检查，如果通过，那么会跳过操作，直接结束
+		:param init_sleep:初始的等待时间，在初始检查前进行的等待，不计入整体timeout时间，一般配合初始检查init_check=True使用
+		:param wait_before_check:在常规检查前的等待时间，一般是和上一次的操作存在一定的等待时间，保证上次的操作可以真实地
+		:param do_interval:两次操作之间地最小间隔。一般是检查结束后，到操作之前的时间。主要是为了保证不要进行太多次的循环
+		:param check_interval:连续两次检查之间的时间间隔，默认值为1，如果想要进行更细致的循环检查，可以将这个数值设置得更小
 		:param error:当检查失败后，是否raise一个error。默认为True，会raise。
 		"""
 		...
