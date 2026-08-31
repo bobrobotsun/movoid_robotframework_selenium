@@ -133,6 +133,7 @@ class BasicCommon(RobotBasic):
                             self._driver_key = driver_keys[1]
                         else:
                             self._driver_key = driver_keys[driver_key_index - 1]
+            self.selenium_lib._drivers._closed.add(self._driver_dict[key]['driver'])
             self._driver_dict[key]['driver'].quit()
             self._driver_dict.pop(key)
             if key in self.selenium_lib._drivers._aliases:
