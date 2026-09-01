@@ -15,7 +15,6 @@ import lxml.html as html
 import selenium.webdriver as webdriver
 import RobotFrameworkBasic
 import robot.libraries.BuiltIn
-import typing as typing.Dict[str, selenium.webdriver.chrome.webdriver
 import selenium.webdriver.remote.webelement
 import lxml.html
 import numpy
