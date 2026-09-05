@@ -190,7 +190,7 @@ class BasicCommon(RobotBasic):
                 if now_windows != past_windows:
                     self._driver_dict[alias]['window_list'] = now_windows
                     should_delete = []
-                    for name, window in self._driver_dict[alias]['window_alias']:
+                    for name, window in self._driver_dict[alias]['window_alias'].items():
                         if window not in now_windows:
                             should_delete.append(name)
                     for name in should_delete:
